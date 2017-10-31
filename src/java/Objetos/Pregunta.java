@@ -36,6 +36,13 @@ public class Pregunta implements Insertable {
         this.temaid = tema;
         this.respuestas = respuestas;
     }
+    
+    public Pregunta(int id, String pregunta, String respuestaCorrecta, int tema) {
+        this.id = id;
+        this.pregunta = pregunta;
+        this.respuestaCorrecta = respuestaCorrecta;
+        this.temaid = tema;
+    }
 
     public Pregunta(String pregunta, String respuestaCorrecta, String tema, Map<String, String> respuestas) {
         this.pregunta = pregunta;

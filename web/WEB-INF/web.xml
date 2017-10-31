@@ -9,6 +9,10 @@
         <servlet-class>BaseDeDatos.CrearConexionBaseDeDatos</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>MostrarPreguntaServlet</servlet-name>
+        <servlet-class>ServletsDeJuego.MostrarPreguntaServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertarPreguntaServlet</servlet-name>
         <url-pattern>/InsertarPreguntaServlet</url-pattern>
@@ -17,6 +21,10 @@
         <servlet-name>CrearConexionBaseDeDatos</servlet-name>
         <url-pattern>/CrearConexionBaseDeDatos</url-pattern>
     </servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>MostrarPreguntaServlet</servlet-name>
+        <url-pattern>/MostrarPreguntaServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
