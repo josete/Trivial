@@ -5,13 +5,8 @@
  */
 package ServletsDeJuego;
 
-import BaseDeDatos.OperacionesBaseDeDatos;
-import Objetos.Pregunta;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Familia
+ * @author Portatil
  */
-public class MostrarPreguntaServlet extends HttpServlet {
+public class ComprobarRespuesta extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,29 +30,22 @@ public class MostrarPreguntaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String respuesta = request.getParameter("respuesta");
+        String respuestaCorrecta = request.getSession().getAttribute("respuestaCorrecta").toString();
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            int totalDePreguntas = OperacionesBaseDeDatos.getNumeroDePreguntas();
-            Random r = new Random();
-            int pregunta = r.nextInt(totalDePreguntas -(1)+1) + 1;
-            System.out.println(pregunta);
-            Pregunta p = OperacionesBaseDeDatos.getPreguntaConId(pregunta);
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Pregunta</title>");
+            out.println("<title>Servlet ComprobarRespuesta</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>" + p.getPregunta() + "</h1>");
-            Iterator i = p.getRespuestas().entrySet().iterator();
-            request.getSession().setAttribute("respuestaCorrecta", p.getRespuestaCorrecta());
-            out.println("<form action='/Trivial/ComprobarRespuesta' method='post'>");
-            while (i.hasNext()) {
-                Map.Entry par = (Map.Entry) i.next();
-                out.println("<input type='radio' name='respuesta' value='"+par.getKey()+"'>" + par.getKey()+")"+par.getValue() + "</input>");
+            if(respuesta.equals(respuestaCorrecta)){
+                out.println("<h1>Respuesta correcta</h1>");
+            }else{
+                out.println("<h1>Respuesta incorrecta</h1>");
             }
-            out.println("<br><br><input type='submit' value='Contestar'>");
-            out.println("</form>");
+            request.getSession().removeAttribute("respuestaCorrecta");
             out.println("</body>");
             out.println("</html>");
         }

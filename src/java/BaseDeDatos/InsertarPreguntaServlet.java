@@ -58,7 +58,8 @@ public class InsertarPreguntaServlet extends HttpServlet {
             out.println("<title>Servlet InsertarPreguntaServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>"+p.getPregunta()+"</h1>");
+            out.println("<h1>"+p.getPregunta()+"</h1><br>");
+            out.println("<a href='nuevaPregunta.html'>Insertar otra pregunta</a>");
             out.println("</body>");
             out.println("</html>");
         }
