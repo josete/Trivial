@@ -5,22 +5,29 @@
  */
 package Objetos;
 
+import BaseDeDatos.ConexionBaseDeDatos;
 import BaseDeDatos.Insertable;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Portatil
  */
-public class Pregunta implements Insertable{
-    
+public class Pregunta implements Insertable {
+
     int id;
     String pregunta;
     //Es la letra de la respuesta
     String respuestaCorrecta;
     int temaid;
-    String tema;
-    Map<String,String> respuestas;
+    Map<String, String> respuestas;
 
     public Pregunta(int id, String pregunta, String respuestaCorrecta, int tema, Map<String, String> respuestas) {
         this.id = id;
@@ -33,7 +40,8 @@ public class Pregunta implements Insertable{
     public Pregunta(String pregunta, String respuestaCorrecta, String tema, Map<String, String> respuestas) {
         this.pregunta = pregunta;
         this.respuestaCorrecta = respuestaCorrecta;
-        this.tema = tema;
+        Tema t = new Tema(tema);
+        temaid = t.insertarEnBaseDeDatos();
         this.respuestas = respuestas;
     }
 
@@ -77,12 +85,43 @@ public class Pregunta implements Insertable{
         this.respuestas = respuestas;
     }
 
-    @Override
-    public void insertarEnBaseDeDatos() {
-        //Insertar tema si no existe
-        /*String sql = "insert into preguntas (pregunta,Temas_idTemas,respuestaCorrecta) values '"+pregunta+"',"+
-                algo+",'"+respuestaCorrecta+"'";*/
+    public void insertarRespuestas() {
+        String sql = "insert into respuestas (respuesta,letraRespuesta,Preguntas_idPreguntas) values(?,?,?)";
+        Iterator i = respuestas.entrySet().iterator();
+        while (i.hasNext()) {
+            Map.Entry par = (Map.Entry)i.next();
+            try {
+                PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1, par.getValue().toString());
+                preparedStatement.setString(2, par.getKey().toString());
+                preparedStatement.setInt(3, id);
+                preparedStatement.executeUpdate();
+                i.remove();
+            } catch (SQLException ex) {
+                Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
-    
-    
+
+    @Override
+    public int insertarEnBaseDeDatos() {
+        int auto_id = -1;
+        String sql = "insert into preguntas (pregunta,Temas_idTemas,respuestaCorrectaLetra) values(?,?,?)";
+        try {
+            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, pregunta);
+            preparedStatement.setInt(2, temaid);
+            preparedStatement.setString(3, respuestaCorrecta);
+            preparedStatement.executeUpdate();
+            //Consigue el ultimo id insertado
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            rs.next();
+            auto_id = rs.getInt(1);
+            id = auto_id;
+        } catch (SQLException ex) {
+            Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return auto_id;
+    }
+
 }

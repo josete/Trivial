@@ -11,6 +11,6 @@ package BaseDeDatos;
  */
 public interface Insertable {
     
-    public void insertarEnBaseDeDatos();
+    public int insertarEnBaseDeDatos();
     
 }

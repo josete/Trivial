@@ -6,6 +6,7 @@
 package BaseDeDatos;
 
 import Objetos.Pregunta;
+import Objetos.Tema;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -49,6 +50,7 @@ public class InsertarPreguntaServlet extends HttpServlet {
             respuestas.put("d", respuestaD);
             Pregunta p = new Pregunta(pregunta, respuestaCorrecta, tema, respuestas);
             p.insertarEnBaseDeDatos();
+            p.insertarRespuestas();
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
