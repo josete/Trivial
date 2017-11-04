@@ -42,9 +42,29 @@ public class ComprobarRespuesta extends HttpServlet {
             out.println("<body>");
             if(respuesta.equals(respuestaCorrecta)){
                 out.println("<h1>Respuesta correcta</h1>");
+                //RespuestasSeguidas
+                if(request.getSession().getAttribute("racha")!=null){
+                    request.getSession().setAttribute("racha", Integer.parseInt(request.getSession().getAttribute("racha").toString())+1);
+                }else{
+                    request.getSession().setAttribute("racha",1);
+                }
+                //Sumar puntos
+                if(request.getSession().getAttribute("puntuacion")!=null){
+                    request.getSession().setAttribute("puntuacion", Integer.parseInt(request.getSession().getAttribute("puntuacion").toString())+10);
+                }else{
+                    request.getSession().setAttribute("puntuacion",10);
+                }
+                out.println("<h1>Puntuacion: "+request.getSession().getAttribute("puntuacion")+"</h1>");
+                out.println("<h1>Racha:"+request.getSession().getAttribute("racha")+"</h1>");
             }else{
                 out.println("<h1>Respuesta incorrecta</h1>");
+                if(request.getSession().getAttribute("racha")!=null){
+                    request.getSession().removeAttribute("racha");
+                }
+                out.println("<h1>Puntuacion: "+request.getSession().getAttribute("puntuacion")+"</h1>");
+                out.println("<h1>Racha: 0</h1>");
             }
+            out.println("<a href='/Trivial/MostrarPreguntaServlet'>Siguiente pregunta</a>");
             request.getSession().removeAttribute("respuestaCorrecta");
             out.println("<a href='/Trivial/MostrarPreguntaServlet'>Siguiente pregunta</a>");
             out.println("</body>");
