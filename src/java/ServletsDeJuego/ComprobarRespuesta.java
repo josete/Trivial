@@ -66,7 +66,6 @@ public class ComprobarRespuesta extends HttpServlet {
             }
             out.println("<a href='/Trivial/MostrarPreguntaServlet'>Siguiente pregunta</a>");
             request.getSession().removeAttribute("respuestaCorrecta");
-            out.println("<a href='/Trivial/MostrarPreguntaServlet'>Siguiente pregunta</a>");
             out.println("</body>");
             out.println("</html>");
         }
