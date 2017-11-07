@@ -61,6 +61,11 @@ public class ComprobarRespuesta extends HttpServlet {
                 if(request.getSession().getAttribute("racha")!=null){
                     request.getSession().removeAttribute("racha");
                 }
+                if(request.getSession().getAttribute("puntuacion")!=null){
+                    request.getSession().setAttribute("puntuacion", Integer.parseInt(request.getSession().getAttribute("puntuacion").toString())+10);
+                }else{
+                    request.getSession().setAttribute("puntuacion",0);
+                }
                 out.println("<h1>Puntuacion: "+request.getSession().getAttribute("puntuacion")+"</h1>");
                 out.println("<h1>Racha: 0</h1>");
             }
