@@ -49,8 +49,8 @@ public class InsertarPreguntaServlet extends HttpServlet {
             respuestas.put("c", respuestaC);
             respuestas.put("d", respuestaD);
             Pregunta p = new Pregunta(pregunta, respuestaCorrecta, tema, respuestas);
-            p.insertarEnBaseDeDatos();
-            p.insertarRespuestas();
+            OperacionesBaseDeDatos.insertarPregunta(p);
+            OperacionesBaseDeDatos.insertarRespuestas(p);
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");

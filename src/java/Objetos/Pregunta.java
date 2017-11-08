@@ -6,7 +6,7 @@
 package Objetos;
 
 import BaseDeDatos.ConexionBaseDeDatos;
-import BaseDeDatos.Insertable;
+import BaseDeDatos.OperacionesBaseDeDatos;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Portatil
  */
-public class Pregunta implements Insertable {
+public class Pregunta{
 
     int id;
     String pregunta;
@@ -48,7 +48,8 @@ public class Pregunta implements Insertable {
         this.pregunta = pregunta;
         this.respuestaCorrecta = respuestaCorrecta;
         Tema t = new Tema(tema);
-        temaid = t.insertarEnBaseDeDatos();
+        temaid=OperacionesBaseDeDatos.insertarTema(t);
+        //temaid = t.insertarEnBaseDeDatos();
         this.respuestas = respuestas;
     }
 
@@ -91,44 +92,4 @@ public class Pregunta implements Insertable {
     public void setRespuestas(Map<String, String> respuestas) {
         this.respuestas = respuestas;
     }
-
-    public void insertarRespuestas() {
-        String sql = "insert into respuestas (respuesta,letraRespuesta,Preguntas_idPreguntas) values(?,?,?)";
-        Iterator i = respuestas.entrySet().iterator();
-        while (i.hasNext()) {
-            Map.Entry par = (Map.Entry)i.next();
-            try {
-                PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setString(1, par.getValue().toString());
-                preparedStatement.setString(2, par.getKey().toString());
-                preparedStatement.setInt(3, id);
-                preparedStatement.executeUpdate();
-                i.remove();
-            } catch (SQLException ex) {
-                Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    @Override
-    public int insertarEnBaseDeDatos() {
-        int auto_id = -1;
-        String sql = "insert into preguntas (pregunta,Temas_idTemas,respuestaCorrectaLetra) values(?,?,?)";
-        try {
-            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, pregunta);
-            preparedStatement.setInt(2, temaid);
-            preparedStatement.setString(3, respuestaCorrecta);
-            preparedStatement.executeUpdate();
-            //Consigue el ultimo id insertado
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            rs.next();
-            auto_id = rs.getInt(1);
-            id = auto_id;
-        } catch (SQLException ex) {
-            Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return auto_id;
-    }
-
 }

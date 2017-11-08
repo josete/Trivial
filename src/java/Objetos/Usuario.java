@@ -9,21 +9,21 @@ package Objetos;
  *
  * @author Portatil
  */
-public class Usuarios {
+public class Usuario {
     
     int id;
     String nombre;
     String passsword;
     String email;
 
-    public Usuarios(int id, String nombre, String passsword, String email) {
+    public Usuario(int id, String nombre, String passsword, String email) {
         this.id = id;
         this.nombre = nombre;
         this.passsword = passsword;
         this.email = email;
     }
 
-    public Usuarios(String nombre, String passsword, String email) {
+    public Usuario(String nombre, String passsword, String email) {
         this.nombre = nombre;
         this.passsword = passsword;
         this.email = email;
