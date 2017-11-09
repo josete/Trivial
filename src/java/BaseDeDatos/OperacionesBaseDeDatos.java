@@ -7,6 +7,7 @@ package BaseDeDatos;
 
 import Objetos.Pregunta;
 import Objetos.Tema;
+import Objetos.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +23,8 @@ import java.util.logging.Logger;
  * @author Familia
  */
 public class OperacionesBaseDeDatos {
-
+    
+    //<editor-fold defaultstate="collapsed" desc="Operaciones con preguntas">
     public static int getNumeroDePreguntas() {
         int cantidad = 0;
         try {
@@ -145,4 +147,26 @@ public class OperacionesBaseDeDatos {
         }
         return id;
     }
+     //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Operaciones con usuarios">
+     public static int insertarUsuario(Usuario usuario) {
+        int auto_id = -1;
+        String sql = "insert into usuarios (nombre,password,email) values(?,?,?)";
+        try {
+            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, usuario.getNombre());
+            preparedStatement.setString(2, usuario.getPasssword());
+            preparedStatement.setString(3, usuario.getEmail());
+            preparedStatement.executeUpdate();
+            //Consigue el ultimo id insertado
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            rs.next();
+            auto_id = rs.getInt(1);
+            usuario.setId(auto_id);
+        } catch (SQLException ex) {
+            Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return auto_id;
+    }
+    //</editor-fold>
 }
