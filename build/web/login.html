@@ -11,9 +11,13 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <a href="nuevaPregunta.html">Insertar Nueva Pregunta</a>
-        <a href="/Trivial/MostrarPreguntaServlet">Contestar pregunta</a>
-        <a href="nuevoUsuario.html">Registro</a>
-        <a href="login.html">Entrar</a>
+        <form method="post" action="/Trivial/LoginServlet">
+            Nombre:<br>
+            <input type="text" name="nombre"><br>
+            Contraseña:<br>
+            <input type="password" name="password"><br>
+            <br>
+            <input type="submit" value="Entrar">
+        </form>
     </body>
 </html>

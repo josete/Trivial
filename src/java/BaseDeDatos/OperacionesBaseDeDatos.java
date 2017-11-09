@@ -8,6 +8,8 @@ package BaseDeDatos;
 import Objetos.Pregunta;
 import Objetos.Tema;
 import Objetos.Usuario;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +25,7 @@ import java.util.logging.Logger;
  * @author Familia
  */
 public class OperacionesBaseDeDatos {
-    
+
     //<editor-fold defaultstate="collapsed" desc="Operaciones con preguntas">
     public static int getNumeroDePreguntas() {
         int cantidad = 0;
@@ -72,12 +74,12 @@ public class OperacionesBaseDeDatos {
         }
         return respuestas;
     }
-    
-     public static void insertarRespuestas(Pregunta pregunta) {
+
+    public static void insertarRespuestas(Pregunta pregunta) {
         String sql = "insert into respuestas (respuesta,letraRespuesta,Preguntas_idPreguntas) values(?,?,?)";
         Iterator i = pregunta.getRespuestas().entrySet().iterator();
         while (i.hasNext()) {
-            Map.Entry par = (Map.Entry)i.next();
+            Map.Entry par = (Map.Entry) i.next();
             try {
                 PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, par.getValue().toString());
@@ -110,10 +112,10 @@ public class OperacionesBaseDeDatos {
         }
         return auto_id;
     }
-    
-     public static int insertarTema(Tema tema) {
-        int auto_id=-1;
-        if (comprobarSiExiste(tema.getNombre())==-1) {
+
+    public static int insertarTema(Tema tema) {
+        int auto_id = -1;
+        if (comprobarSiExiste(tema.getNombre()) == -1) {
             String sql = "insert into temas (nombre) values(?)";
             try {
                 PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -126,20 +128,20 @@ public class OperacionesBaseDeDatos {
             } catch (SQLException ex) {
                 Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else{
+        } else {
             auto_id = comprobarSiExiste(tema.getNombre());//Cambiar
         }
         return auto_id;
     }
-     
-     private static int comprobarSiExiste(String nombre) {
+
+    private static int comprobarSiExiste(String nombre) {
         int id = -1;
         try {
             String sql = "Select * from temas where nombre = ?";
             PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql);
             preparedStatement.setString(1, nombre);
             ResultSet rs = preparedStatement.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 id = rs.getInt(1);
             }
         } catch (SQLException ex) {
@@ -147,9 +149,10 @@ public class OperacionesBaseDeDatos {
         }
         return id;
     }
-     //</editor-fold>
+    //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Operaciones con usuarios">
-     public static int insertarUsuario(Usuario usuario) {
+
+    public static int insertarUsuario(Usuario usuario) {
         int auto_id = -1;
         String sql = "insert into usuarios (nombre,password,email) values(?,?,?)";
         try {
@@ -167,6 +170,37 @@ public class OperacionesBaseDeDatos {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
         }
         return auto_id;
+    }
+
+    public static Usuario getUsuario(String nombre, String contrasena) {
+        Usuario u = null;
+        MessageDigest md;
+        StringBuffer sb = null;
+        try {
+            contrasena += "misupersalt";
+            md = MessageDigest.getInstance("SHA-256");
+            md.update(contrasena.getBytes());
+            byte byteData[] = md.digest();
+            sb = new StringBuffer();
+            for (int i = 0; i < byteData.length; i++) {
+                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(NuevoUsuarioServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String sql = "select * from usuarios where nombre=? and password=?";
+        try {
+            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, nombre);
+            preparedStatement.setString(2, sb.toString());
+            ResultSet rs = preparedStatement.executeQuery();
+            if(rs.next()){
+                u = new Usuario(rs.getInt(1), rs.getString(2), rs.getString(4));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return u;
     }
     //</editor-fold>
 }

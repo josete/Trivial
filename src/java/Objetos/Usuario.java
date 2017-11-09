@@ -29,6 +29,13 @@ public class Usuario {
         this.email = email;
     }
 
+    public Usuario(int id, String nombre, String email) {
+        this.id = id;
+        this.nombre = nombre;
+        this.email = email;
+    }
+    
+
     public int getId() {
         return id;
     }
