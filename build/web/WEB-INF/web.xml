@@ -17,6 +17,14 @@
         <servlet-name>ComprobarRespuesta</servlet-name>
         <servlet-class>ServletsDeJuego.ComprobarRespuesta</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NuevoUsuarioServlet</servlet-name>
+        <servlet-class>BaseDeDatos.NuevoUsuarioServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>ServletsDeJuego.LoginServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertarPreguntaServlet</servlet-name>
         <url-pattern>/InsertarPreguntaServlet</url-pattern>
@@ -32,6 +40,14 @@
     <servlet-mapping>
         <servlet-name>ComprobarRespuesta</servlet-name>
         <url-pattern>/ComprobarRespuesta</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NuevoUsuarioServlet</servlet-name>
+        <url-pattern>/NuevoUsuarioServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

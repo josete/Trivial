@@ -3,14 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package BaseDeDatos;
+package ServletsDeJuego;
 
-import Objetos.Pregunta;
-import Objetos.Tema;
+import BaseDeDatos.OperacionesBaseDeDatos;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Portatil
+ * @author Familia
  */
-public class InsertarPreguntaServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,32 +31,21 @@ public class InsertarPreguntaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
+        String nombre = request.getParameter("nombre");
+        String contrasena = request.getParameter("password");
         try (PrintWriter out = response.getWriter()) {
-            String pregunta = request.getParameter("pregunta");
-            String respuestaCorrecta = request.getParameter("respuestaCorrecta");
-            String respuestaA = request.getParameter("respuestaA");
-            String respuestaB = request.getParameter("respuestaB");
-            String respuestaC = request.getParameter("respuestaC");
-            String respuestaD = request.getParameter("respuestaD");
-            String tema = request.getParameter("tema");
-            Map<String,String> respuestas = new HashMap<>();
-            respuestas.put("a", respuestaA);
-            respuestas.put("b", respuestaB);
-            respuestas.put("c", respuestaC);
-            respuestas.put("d", respuestaD);
-            Pregunta p = new Pregunta(pregunta, respuestaCorrecta, tema, respuestas);
-            OperacionesBaseDeDatos.insertarPregunta(p);
-            OperacionesBaseDeDatos.insertarRespuestas(p);
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet InsertarPreguntaServlet</title>");            
+            out.println("<title>Servlet LoginServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>"+p.getPregunta()+"</h1><br>");
-            out.println("<a href='nuevaPregunta.html'>Insertar otra pregunta</a>");
+            if(OperacionesBaseDeDatos.getUsuario(nombre, contrasena)!=null){
+                out.println("<h1>Login realizado con exito</h1>");
+            }else{
+                out.println("<h1>Usuario o contraseña incorrectos</h1>");
+            }
             out.println("</body>");
             out.println("</html>");
         }
