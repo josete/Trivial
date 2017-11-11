@@ -2,15 +2,9 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-<<<<<<< HEAD
-        <group/>
-=======
         <group>
-            <file>file:/C:/Users/Familia/Documents/NetBeansProjects/Trivial/src/java/BaseDeDatos/NuevoUsuarioServlet.java</file>
-            <file>file:/C:/Users/Familia/Documents/NetBeansProjects/Trivial/src/java/Objetos/Usuario.java</file>
+            <file>file:/C:/Users/Familia/Documents/NetBeansProjects/Trivial/src/java/BaseDeDatos/ConexionBaseDeDatos.java</file>
             <file>file:/C:/Users/Familia/Documents/NetBeansProjects/Trivial/src/java/BaseDeDatos/OperacionesBaseDeDatos.java</file>
-            <file>file:/C:/Users/Familia/Documents/NetBeansProjects/Trivial/src/java/ServletsDeJuego/LoginServlet.java</file>
         </group>
->>>>>>> baaf66b1a5e03aba281e7dfb3010e45f8845aeef
     </open-files>
 </project-private>

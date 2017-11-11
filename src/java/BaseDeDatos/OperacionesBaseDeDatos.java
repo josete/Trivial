@@ -10,6 +10,7 @@ import Objetos.Tema;
 import Objetos.Usuario;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,51 +27,93 @@ import java.util.logging.Logger;
  */
 public class OperacionesBaseDeDatos {
 
+    private static void cerrarRecursos(ResultSet rs, PreparedStatement ps, Connection c) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(OperacionesBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(OperacionesBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (c != null) {
+            try {
+                c.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(OperacionesBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Operaciones con preguntas">
     public static int getNumeroDePreguntas() {
         int cantidad = 0;
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
         try {
             String sql = "Select count(*) from preguntas";
-            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql);
-            ResultSet rs = preparedStatement.executeQuery();
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql);
+            rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 cantidad = rs.getInt(1);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cerrarRecursos(rs, preparedStatement, c);
         }
         return cantidad;
     }
 
     public static Pregunta getPreguntaConId(int id) {
         Pregunta p = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
         try {
             String sql = "Select * from preguntas where idPreguntas = ?";
-            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql);
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql);
             preparedStatement.setInt(1, id);
-            ResultSet rs = preparedStatement.executeQuery();
+            rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 p = new Pregunta(rs.getInt(1), rs.getString(2), rs.getString(4), rs.getInt(3));
                 p.setRespuestas(getRespuestasDePregunta(id));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cerrarRecursos(rs, preparedStatement, c);
         }
         return p;
     }
 
     private static Map<String, String> getRespuestasDePregunta(int id) {
         Map<String, String> respuestas = new HashMap<>();
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
         try {
             String sql = "Select * from respuestas where Preguntas_idPreguntas = ?";
-            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql);
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql);
             preparedStatement.setInt(1, id);
-            ResultSet rs = preparedStatement.executeQuery();
+            rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 respuestas.put(rs.getString(3), rs.getString(2));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cerrarRecursos(rs, preparedStatement, c);
         }
         return respuestas;
     }
@@ -78,10 +121,14 @@ public class OperacionesBaseDeDatos {
     public static void insertarRespuestas(Pregunta pregunta) {
         String sql = "insert into respuestas (respuesta,letraRespuesta,Preguntas_idPreguntas) values(?,?,?)";
         Iterator i = pregunta.getRespuestas().entrySet().iterator();
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
         while (i.hasNext()) {
             Map.Entry par = (Map.Entry) i.next();
             try {
-                PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                c = ConexionBaseDeDatos.getConexion();
+                preparedStatement = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, par.getValue().toString());
                 preparedStatement.setString(2, par.getKey().toString());
                 preparedStatement.setInt(3, pregunta.getId());
@@ -89,6 +136,8 @@ public class OperacionesBaseDeDatos {
                 i.remove();
             } catch (SQLException ex) {
                 Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                cerrarRecursos(rs, preparedStatement, c);
             }
         }
     }
@@ -96,19 +145,25 @@ public class OperacionesBaseDeDatos {
     public static int insertarPregunta(Pregunta pregunta) {
         int auto_id = -1;
         String sql = "insert into preguntas (pregunta,Temas_idTemas,respuestaCorrectaLetra) values(?,?,?)";
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
         try {
-            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, pregunta.getPregunta());
             preparedStatement.setInt(2, pregunta.getTemaid());
             preparedStatement.setString(3, pregunta.getRespuestaCorrecta());
             preparedStatement.executeUpdate();
             //Consigue el ultimo id insertado
-            ResultSet rs = preparedStatement.getGeneratedKeys();
+            rs = preparedStatement.getGeneratedKeys();
             rs.next();
             auto_id = rs.getInt(1);
             pregunta.setId(auto_id);
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cerrarRecursos(rs, preparedStatement, c);
         }
         return auto_id;
     }
@@ -117,16 +172,22 @@ public class OperacionesBaseDeDatos {
         int auto_id = -1;
         if (comprobarSiExiste(tema.getNombre()) == -1) {
             String sql = "insert into temas (nombre) values(?)";
+            PreparedStatement preparedStatement = null;
+            ResultSet rs = null;
+            Connection c = null;
             try {
-                PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                c = ConexionBaseDeDatos.getConexion();
+                preparedStatement = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, tema.getNombre());
                 preparedStatement.executeUpdate();
                 //Consigue el ultimo id insertado
-                ResultSet rs = preparedStatement.getGeneratedKeys();
+                rs = preparedStatement.getGeneratedKeys();
                 rs.next();
                 auto_id = rs.getInt(1);
             } catch (SQLException ex) {
                 Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                cerrarRecursos(rs, preparedStatement, c);
             }
         } else {
             auto_id = comprobarSiExiste(tema.getNombre());//Cambiar
@@ -136,16 +197,22 @@ public class OperacionesBaseDeDatos {
 
     private static int comprobarSiExiste(String nombre) {
         int id = -1;
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
         try {
             String sql = "Select * from temas where nombre = ?";
-            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql);
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql);
             preparedStatement.setString(1, nombre);
-            ResultSet rs = preparedStatement.executeQuery();
+            rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 id = rs.getInt(1);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            cerrarRecursos(rs, preparedStatement, c);
         }
         return id;
     }
@@ -155,19 +222,25 @@ public class OperacionesBaseDeDatos {
     public static int insertarUsuario(Usuario usuario) {
         int auto_id = -1;
         String sql = "insert into usuarios (nombre,password,email) values(?,?,?)";
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
         try {
-            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, usuario.getNombre());
             preparedStatement.setString(2, usuario.getPasssword());
             preparedStatement.setString(3, usuario.getEmail());
             preparedStatement.executeUpdate();
             //Consigue el ultimo id insertado
-            ResultSet rs = preparedStatement.getGeneratedKeys();
+            rs = preparedStatement.getGeneratedKeys();
             rs.next();
             auto_id = rs.getInt(1);
             usuario.setId(auto_id);
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            cerrarRecursos(rs, preparedStatement, c);
         }
         return auto_id;
     }
@@ -176,6 +249,9 @@ public class OperacionesBaseDeDatos {
         Usuario u = null;
         MessageDigest md;
         StringBuffer sb = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
         try {
             contrasena += "misupersalt";
             md = MessageDigest.getInstance("SHA-256");
@@ -190,15 +266,18 @@ public class OperacionesBaseDeDatos {
         }
         String sql = "select * from usuarios where nombre=? and password=?";
         try {
-            PreparedStatement preparedStatement = ConexionBaseDeDatos.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, nombre);
             preparedStatement.setString(2, sb.toString());
-            ResultSet rs = preparedStatement.executeQuery();
-            if(rs.next()){
+            rs = preparedStatement.executeQuery();
+            if (rs.next()) {
                 u = new Usuario(rs.getInt(1), rs.getString(2), rs.getString(4));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            cerrarRecursos(rs, preparedStatement, c);
         }
         return u;
     }
