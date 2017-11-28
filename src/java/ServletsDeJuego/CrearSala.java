@@ -6,6 +6,7 @@
 package ServletsDeJuego;
 
 import BaseDeDatos.OperacionesBaseDeDatos;
+import Objetos.Sala;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -15,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Familia
+ * @author Portatil
  */
-public class LoginServlet extends HttpServlet {
+public class CrearSala extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,22 +32,17 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String nombre = request.getParameter("nombre");
-        String contrasena = request.getParameter("password");
+        Sala s = new Sala();
+        OperacionesBaseDeDatos.insertarSala(s);
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
+            out.println("<title>Servlet CrearSala</title>");            
             out.println("</head>");
             out.println("<body>");
-            if(OperacionesBaseDeDatos.getUsuario(nombre, contrasena)!=null){
-                out.println("<h1>Login realizado con exito</h1>");
-                request.getSession(true).setAttribute("login", true);
-            }else{
-                out.println("<h1>Usuario o contraseña incorrectos</h1>");
-            }
+            out.println("<h1>El id de la sala es: " + s.getId() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
