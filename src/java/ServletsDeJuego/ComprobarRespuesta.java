@@ -62,7 +62,7 @@ public class ComprobarRespuesta extends HttpServlet {
                     request.getSession().removeAttribute("racha");
                 }
                 if(request.getSession().getAttribute("puntuacion")!=null){
-                    request.getSession().setAttribute("puntuacion", Integer.parseInt(request.getSession().getAttribute("puntuacion").toString())+10);
+                    request.getSession().setAttribute("puntuacion", Integer.parseInt(request.getSession().getAttribute("puntuacion").toString())+0);
                 }else{
                     request.getSession().setAttribute("puntuacion",0);
                 }
