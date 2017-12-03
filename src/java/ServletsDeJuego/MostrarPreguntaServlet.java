@@ -7,6 +7,8 @@ package ServletsDeJuego;
 
 import BaseDeDatos.OperacionesBaseDeDatos;
 import Objetos.Pregunta;
+import Objetos.Puntuacion;
+import Objetos.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -40,6 +42,13 @@ public class MostrarPreguntaServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             int totalDePreguntas = OperacionesBaseDeDatos.getNumeroDePreguntas();
             ArrayList<Integer> numeros;
+            int totalPreguntasAMostrar = 0;
+            if(request.getSession().getAttribute("preguntasAMostrar")!=null){
+                totalPreguntasAMostrar = (int)request.getSession().getAttribute("preguntasAMostrar");
+            }else{
+                request.getSession().setAttribute("preguntasAMostrar", 5);
+                totalPreguntasAMostrar = 5;
+            }
             if(request.getSession().getAttribute("numeros")==null){
                 numeros = new ArrayList<>();
                 request.getSession().setAttribute("numeros", numeros);
@@ -51,18 +60,21 @@ public class MostrarPreguntaServlet extends HttpServlet {
             boolean hayPreguntas = true;
             if(numeros.isEmpty()){
                 pregunta = r.nextInt(totalDePreguntas -(1)+1) + 1;
+                totalPreguntasAMostrar--;
+            }else{
+                pregunta = (int)request.getSession().getAttribute("idUltimaPregunta");
             }
-            if(numeros.size()==totalDePreguntas){
+            if(numeros.size()==totalDePreguntas||totalPreguntasAMostrar==0){
                 hayPreguntas=false;
-            }
-            if(pregunta==0){
-                pregunta = r.nextInt(totalDePreguntas -(1)+1) + 1;
             }
             while(numeros.contains(pregunta) && !numeros.isEmpty()&&hayPreguntas){
                 pregunta = r.nextInt(totalDePreguntas -(1)+1) + 1;    
+                totalPreguntasAMostrar--;
             }
             System.out.println("------"+pregunta);
             numeros.add(pregunta);
+            request.getSession().setAttribute("idUltimaPregunta", pregunta);
+            request.getSession().setAttribute("preguntasAMostrar", totalPreguntasAMostrar);
             request.getSession().setAttribute("numeros", numeros);
             Pregunta p = OperacionesBaseDeDatos.getPreguntaConId(pregunta);
             out.println("<!DOCTYPE html>");
@@ -83,6 +95,21 @@ public class MostrarPreguntaServlet extends HttpServlet {
                 out.println("<br><br><input type='submit' value='Contestar'>");
             }else{
                 out.println("<h1>No hay preguntas</h1>");
+                out.println("Tu puntuacion obtenidad es: "+request.getSession().getAttribute("puntuacion")+"<br>");
+                out.println("Tu racha ha sido de : "+request.getSession().getAttribute("racha")+" preguntas");
+                //Reset para poder volver a jugar
+                request.getSession().removeAttribute("preguntasAMostrar");
+                request.getSession().removeAttribute("idUltimaPregunta");
+                request.getSession().removeAttribute("numeros");
+                //Guardar resultados en la base de datos
+                Usuario u = (Usuario)request.getSession().getAttribute("usuario");
+                Puntuacion puntuacion = new Puntuacion(u.getId(), 
+                        (int)request.getSession().getAttribute("puntuacion"), 
+                        (int)request.getSession().getAttribute("racha"));
+                OperacionesBaseDeDatos.insertarPuntuacion(puntuacion);
+                //Resetear puntuaciones
+                request.getSession().removeAttribute("puntuacion");
+                request.getSession().removeAttribute("racha");
             }
             out.println("</form>");
             out.println("</body>");

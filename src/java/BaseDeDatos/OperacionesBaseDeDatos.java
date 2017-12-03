@@ -6,6 +6,8 @@
 package BaseDeDatos;
 
 import Objetos.Pregunta;
+import Objetos.Puntuacion;
+import Objetos.Sala;
 import Objetos.Tema;
 import Objetos.Usuario;
 import java.security.MessageDigest;
@@ -211,7 +213,7 @@ public class OperacionesBaseDeDatos {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             cerrarRecursos(rs, preparedStatement, c);
         }
         return id;
@@ -239,7 +241,7 @@ public class OperacionesBaseDeDatos {
             usuario.setId(auto_id);
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             cerrarRecursos(rs, preparedStatement, c);
         }
         return auto_id;
@@ -276,10 +278,85 @@ public class OperacionesBaseDeDatos {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             cerrarRecursos(rs, preparedStatement, c);
         }
         return u;
+    }
+
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Operaciones con salas">
+    public static int insertarSala(Sala sala) {
+        int auto_id = -1;
+        String sql = "insert into partidas (idPartidas) values (null)";
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
+        try {
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.executeUpdate();
+            //Consigue el ultimo id insertado
+            rs = preparedStatement.getGeneratedKeys();
+            rs.next();
+            auto_id = rs.getInt(1);
+            sala.setId(auto_id);
+        } catch (SQLException ex) {
+            Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cerrarRecursos(rs, preparedStatement, c);
+        }
+        return auto_id;
+    }
+    public static int insertarUsuarioEnSala(Sala sala, Usuario u) {
+        int auto_id = -1;
+        String sql = "insert into usuariosenpartida (Usuarios_idUsuarios,Partidas_idPartidas) values (?,?)";
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
+        try {
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            preparedStatement.setInt(1, sala.getId());
+            preparedStatement.setInt(2, u.getId());
+            //Consigue el ultimo id insertado
+            rs = preparedStatement.getGeneratedKeys();
+            rs.next();
+            auto_id = rs.getInt(1);
+            sala.setId(auto_id);
+        } catch (SQLException ex) {
+            Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cerrarRecursos(rs, preparedStatement, c);
+        }
+        return auto_id;
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Operaciones con puntuaciones">
+    public static int insertarPuntuacion(Puntuacion puntuacion) {
+        int auto_id = -1;
+        String sql = "insert into puntuaciones (id_jugador,max_puntuacion,max_racha) values(?,?,?)";
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
+        try {
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, puntuacion.getIdJugador());
+            preparedStatement.setInt(2, puntuacion.getPuntuacion());
+            preparedStatement.setInt(3, puntuacion.getRacha());
+            preparedStatement.executeUpdate();
+            //Consigue el ultimo id insertado
+            rs = preparedStatement.getGeneratedKeys();
+            rs.next();
+            auto_id = rs.getInt(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cerrarRecursos(rs, preparedStatement, c);
+        }
+        return auto_id;
     }
     //</editor-fold>
 }

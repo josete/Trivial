@@ -5,6 +5,8 @@
  */
 package ServletsDeJuego;
 
+import BaseDeDatos.OperacionesBaseDeDatos;
+import Objetos.Sala;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -16,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Portatil
  */
-public class ComprobarRespuesta extends HttpServlet {
+public class CrearSala extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,47 +32,17 @@ public class ComprobarRespuesta extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String respuesta = request.getParameter("respuesta");
-        String respuestaCorrecta = request.getSession().getAttribute("respuestaCorrecta").toString();
+        Sala s = new Sala();
+        OperacionesBaseDeDatos.insertarSala(s);
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ComprobarRespuesta</title>");            
+            out.println("<title>Servlet CrearSala</title>");            
             out.println("</head>");
             out.println("<body>");
-            if(respuesta.equals(respuestaCorrecta)){
-                out.println("<h1>Respuesta correcta</h1>");
-                //RespuestasSeguidas
-                if(request.getSession().getAttribute("racha")!=null){
-                    request.getSession().setAttribute("racha", Integer.parseInt(request.getSession().getAttribute("racha").toString())+1);
-                }else{
-                    request.getSession().setAttribute("racha",1);
-                }
-                //Sumar puntos
-                if(request.getSession().getAttribute("puntuacion")!=null){
-                    request.getSession().setAttribute("puntuacion", Integer.parseInt(request.getSession().getAttribute("puntuacion").toString())+10);
-                }else{
-                    request.getSession().setAttribute("puntuacion",10);
-                }
-                out.println("<h1>Puntuacion: "+request.getSession().getAttribute("puntuacion")+"</h1>");
-                out.println("<h1>Racha:"+request.getSession().getAttribute("racha")+"</h1>");
-            }else{
-                out.println("<h1>Respuesta incorrecta</h1>");
-                if(request.getSession().getAttribute("racha")!=null){
-                    request.getSession().removeAttribute("racha");
-                }
-                if(request.getSession().getAttribute("puntuacion")!=null){
-                    request.getSession().setAttribute("puntuacion", Integer.parseInt(request.getSession().getAttribute("puntuacion").toString())+0);
-                }else{
-                    request.getSession().setAttribute("puntuacion",0);
-                }
-                out.println("<h1>Puntuacion: "+request.getSession().getAttribute("puntuacion")+"</h1>");
-                out.println("<h1>Racha: 0</h1>");
-            }
-            out.println("<a href='/Trivial/MostrarPreguntaServlet'>Siguiente pregunta</a>");
-            request.getSession().removeAttribute("respuestaCorrecta");
+            out.println("<h1>El id de la sala es: " + s.getId() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }

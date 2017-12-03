@@ -6,6 +6,7 @@
 package ServletsDeJuego;
 
 import BaseDeDatos.OperacionesBaseDeDatos;
+import Objetos.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -41,8 +42,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<title>Servlet LoginServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            if(OperacionesBaseDeDatos.getUsuario(nombre, contrasena)!=null){
+            Usuario u = OperacionesBaseDeDatos.getUsuario(nombre, contrasena);
+            if(u!=null){
                 out.println("<h1>Login realizado con exito</h1>");
+                request.getSession(true).setAttribute("usuario", u);
             }else{
                 out.println("<h1>Usuario o contraseña incorrectos</h1>");
             }
