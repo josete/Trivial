@@ -12,6 +12,14 @@
     <servlet>
         <servlet-name>MostrarPreguntaServlet</servlet-name>
         <servlet-class>ServletsDeJuego.MostrarPreguntaServlet</servlet-class>
+        <init-param> 
+            <param-name>colorDeportes</param-name> 
+            <param-value>#e67e22</param-value> 
+        </init-param> 
+        <init-param> 
+            <param-name>ColorHistoria</param-name> 
+            <param-value>#f1c40f</param-value> 
+        </init-param> 
     </servlet>
     <servlet>
         <servlet-name>ComprobarRespuesta</servlet-name>
@@ -75,5 +83,9 @@
     <filter-mapping>
         <filter-name>FiltroLogin</filter-name>
         <url-pattern>/MostrarPreguntaServlet</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FiltroLogin</filter-name>
+        <url-pattern>/dashboard.jsp</url-pattern>
     </filter-mapping>
 </web-app>

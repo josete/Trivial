@@ -218,6 +218,28 @@ public class OperacionesBaseDeDatos {
         }
         return id;
     }
+    
+    public static String getTemaConId(int idTema) {
+        String tema = "";
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
+        try {
+            String sql = "Select * from temas where idTemas = ?";
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql);
+            preparedStatement.setInt(1, idTema);
+            rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                tema = rs.getString(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cerrarRecursos(rs, preparedStatement, c);
+        }
+        return tema;
+    }
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Operaciones con usuarios">
 

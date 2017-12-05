@@ -1,0 +1,32 @@
+body{
+    background-color:#6480ff;
+}
+
+h1{
+    font-size: 36px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.site-wrapper-inner{
+    vertical-align: middle;
+    text-align: center;
+}
+
+.cover-container{
+    width: 700px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.cover{
+    padding: 20px;
+}
+
+.lead{
+    font-size: 21px;
+    margin-bottom: 20px;
+    font-weight: 300;
+    line-height: 1.4;
+    margin:0 0 10px;
+}
+

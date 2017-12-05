@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class MostrarPreguntaServlet extends HttpServlet {
 
+    String colorDeportes;
+    String colorHistoria;
+
+    @Override
+    public void init() throws ServletException {
+        colorDeportes = this.getInitParameter("colorDeportes");
+        colorHistoria = this.getInitParameter("colorHistoria");
+    }
+    
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,7 +49,7 @@ public class MostrarPreguntaServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        //response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             int totalDePreguntas = OperacionesBaseDeDatos.getNumeroDePreguntas();
@@ -77,22 +89,36 @@ public class MostrarPreguntaServlet extends HttpServlet {
             request.getSession().setAttribute("preguntasAMostrar", totalPreguntasAMostrar);
             request.getSession().setAttribute("numeros", numeros);
             Pregunta p = OperacionesBaseDeDatos.getPreguntaConId(pregunta);
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Pregunta</title>");
-            out.println("</head>");
-            out.println("<body>");
+            switch(OperacionesBaseDeDatos.getTemaConId(p.getTemaid())){
+                case "Deportes":
+                    System.out.println("Pomgo color");
+                    request.setAttribute("colorFondo", colorDeportes);
+                    break;
+                case "Historia":
+                    System.out.println("Pomgo color");
+                    request.setAttribute("colorFondo", colorHistoria);
+                    break;
+            }
+//            out.println("<!DOCTYPE html>");
+//            out.println("<html>");
+//            out.println("<head>");
+//            out.println("<title>Pregunta</title>");
+//            out.println("</head>");
+//            out.println("<body>");
             if(hayPreguntas){
-                out.println("<h1>" + p.getPregunta() + "</h1>");
+                //out.println("<h1>" + p.getPregunta() + "</h1>");
                 Iterator i = p.getRespuestas().entrySet().iterator();
+                request.getSession().setAttribute("pregunta", p);
                 request.getSession().setAttribute("respuestaCorrecta", p.getRespuestaCorrecta());
-                out.println("<form action='/Trivial/ComprobarRespuesta' method='post'>");
+                //out.println("<form action='/Trivial/ComprobarRespuesta' method='post'>");
                 while (i.hasNext()) {
                     Map.Entry par = (Map.Entry) i.next();
-                    out.println("<input type='radio' name='respuesta' value='"+par.getKey()+"'>" + par.getKey()+")"+par.getValue() + "</input>");
+                    request.getSession().setAttribute("res"+par.getKey().toString().toUpperCase(), par.getValue());
+                    //out.println("<input type='radio' name='respuesta' value='"+par.getKey()+"'>" + par.getKey()+")"+par.getValue() + "</input>");
                 }
-                out.println("<br><br><input type='submit' value='Contestar'>");
+                //out.println("<br><br><input type='submit' value='Contestar'>");
+                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/preguntas.jsp");
+                dispatcher.forward(request, response);
             }else{
                 out.println("<h1>No hay preguntas</h1>");
                 out.println("Tu puntuacion obtenidad es: "+request.getSession().getAttribute("puntuacion")+"<br>");

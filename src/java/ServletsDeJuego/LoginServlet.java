@@ -9,6 +9,7 @@ import BaseDeDatos.OperacionesBaseDeDatos;
 import Objetos.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,27 +32,16 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         String nombre = request.getParameter("nombre");
-        String contrasena = request.getParameter("password");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
+        String contrasena = request.getParameter("contrasena");
             Usuario u = OperacionesBaseDeDatos.getUsuario(nombre, contrasena);
             if(u!=null){
-                out.println("<h1>Login realizado con exito</h1>");
                 request.getSession(true).setAttribute("usuario", u);
+                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/dashboard.jsp");
+                dispatcher.forward(request, response);
             }else{
-                out.println("<h1>Usuario o contraseña incorrectos</h1>");
+                //Forward
             }
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

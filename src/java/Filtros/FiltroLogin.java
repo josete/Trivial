@@ -28,7 +28,6 @@ public class FiltroLogin implements Filter{
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        System.out.println("Atiendo la peticion del filtro");
         HttpServletRequest r = (HttpServletRequest)request;
         if((Usuario)r.getSession().getAttribute("usuario")!=null){
             chain.doFilter(request, response);
