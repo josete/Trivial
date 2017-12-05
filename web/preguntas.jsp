@@ -20,10 +20,10 @@
         <%@include file="header.html"%>
         <div class="contenedorPreguntas">
             <p>${pregunta.pregunta}</p><br>
-            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=a">${resA}</a>
-            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=b">${resB}</a>
-            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=c">${resC}</a>
-            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=d">${resD}</a>
+            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=a">${resA}</a><br><br>
+            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=b">${resB}</a><br><br>
+            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=c">${resC}</a><br><br>
+            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=d">${resD}</a><br><br>
         </div>
     </body>
 </html>
