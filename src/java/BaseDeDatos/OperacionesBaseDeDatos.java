@@ -231,7 +231,7 @@ public class OperacionesBaseDeDatos {
             preparedStatement.setInt(1, idTema);
             rs = preparedStatement.executeQuery();
             if (rs.next()) {
-                tema = rs.getString(1);
+                tema = rs.getString(2);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);

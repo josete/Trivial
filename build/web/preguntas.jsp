@@ -14,16 +14,31 @@
         <link rel="stylesheet" href="css/preguntas.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="js/preguntas.js"></script>
         <title>Preguntas</title>
     </head>
-    <body style="background-color: ${colorFondo}">
+    <body>
         <%@include file="header.html"%>
-        <div class="contenedorPreguntas">
-            <p>${pregunta.pregunta}</p><br>
-            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=a">${resA}</a><br><br>
-            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=b">${resB}</a><br><br>
-            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=c">${resC}</a><br><br>
-            <a class="btn btn-lg btn-default" href="/Trivial/ComprobarRespuesta?respuesta=d">${resD}</a><br><br>
+        <div class="contenedor">
+            <div class="contenedorPreguntas" style="background-color: ${colorFondo}">
+                <h3>${pregunta.pregunta}</h3><br>
+                <div class="respuestas">
+                    <div class="mitad">
+                        <a class="btn btn-lg btn-default ancho" href="/Trivial/ComprobarRespuesta?respuesta=a">${resA}</a><br><br>
+                        <a class="btn btn-lg btn-default ancho" href="/Trivial/ComprobarRespuesta?respuesta=b">${resB}</a><br><br>
+                    </div>
+                    <div class="mitad">
+                        <a class="btn btn-lg btn-default ancho" href="/Trivial/ComprobarRespuesta?respuesta=c">${resC}</a><br><br>
+                        <a class="btn btn-lg btn-default ancho" href="/Trivial/ComprobarRespuesta?respuesta=d">${resD}</a><br><br>
+                    </div>
+                </div>
+            </div>
+            <div class="barraProgresoContenedor">
+                <div class="barraProgreso" style="width: ${preguntasRealizadasPorcentaje}%"></div>
+            </div>
+            <div class="mensaje ${correcion}" id="mensajeCorrecion">
+                Respuesta ${correcion}
+            </div>
         </div>
     </body>
 </html>

@@ -7,6 +7,7 @@ package ServletsDeJuego;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,50 +30,65 @@ public class ComprobarRespuesta extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        //response.setContentType("application/json");
         String respuesta = request.getParameter("respuesta");
         String respuestaCorrecta = request.getSession().getAttribute("respuestaCorrecta").toString();
+        //String returnJson = "";
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
+ /*out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet ComprobarRespuesta</title>");            
             out.println("</head>");
-            out.println("<body>");
-            if(respuesta.equals(respuestaCorrecta)){
-                out.println("<h1>Respuesta correcta</h1>");
+            out.println("<body>");*/
+            if (respuesta.equals(respuestaCorrecta)) {
+                //out.println("<h1>Respuesta correcta</h1>");
                 //RespuestasSeguidas
-                if(request.getSession().getAttribute("racha")!=null){
-                    request.getSession().setAttribute("racha", Integer.parseInt(request.getSession().getAttribute("racha").toString())+1);
-                }else{
-                    request.getSession().setAttribute("racha",1);
+                if (request.getSession().getAttribute("racha") != null) {
+                    request.getSession().setAttribute("racha", Integer.parseInt(request.getSession().getAttribute("racha").toString()) + 1);
+                } else {
+                    request.getSession().setAttribute("racha", 1);
                 }
                 //Sumar puntos
-                if(request.getSession().getAttribute("puntuacion")!=null){
-                    request.getSession().setAttribute("puntuacion", Integer.parseInt(request.getSession().getAttribute("puntuacion").toString())+10);
-                }else{
-                    request.getSession().setAttribute("puntuacion",10);
+                if (request.getSession().getAttribute("puntuacion") != null) {
+                    request.getSession().setAttribute("puntuacion", Integer.parseInt(request.getSession().getAttribute("puntuacion").toString()) + 10);
+                } else {
+                    request.getSession().setAttribute("puntuacion", 10);
                 }
-                out.println("<h1>Puntuacion: "+request.getSession().getAttribute("puntuacion")+"</h1>");
-                out.println("<h1>Racha:"+request.getSession().getAttribute("racha")+"</h1>");
-            }else{
-                out.println("<h1>Respuesta incorrecta</h1>");
-                if(request.getSession().getAttribute("racha")!=null){
+                request.getSession().setAttribute("correcion", "correcta");
+                /*returnJson = "{'correccion':'correcta','puntos':+"+request.getSession().getAttribute("puntuacion")+",'racha'"+request.getSession().getAttribute("racha")+"}";
+                out.println(returnJson);
+		out.close();*/
+ /* out.println("<h1>Puntuacion: "+request.getSession().getAttribute("puntuacion")+"</h1>");
+                out.println("<h1>Racha:"+request.getSession().getAttribute("racha")+"</h1>");*/
+            } else {
+                //out.println("<h1>Respuesta incorrecta</h1>");
+                if (request.getSession().getAttribute("racha") != null) {
                     request.getSession().removeAttribute("racha");
                 }
-                if(request.getSession().getAttribute("puntuacion")!=null){
-                    request.getSession().setAttribute("puntuacion", Integer.parseInt(request.getSession().getAttribute("puntuacion").toString())+0);
-                }else{
-                    request.getSession().setAttribute("puntuacion",0);
+                if (request.getSession().getAttribute("puntuacion") != null) {
+                    request.getSession().setAttribute("puntuacion", Integer.parseInt(request.getSession().getAttribute("puntuacion").toString()) + 0);
+                } else {
+                    request.getSession().setAttribute("puntuacion", 0);
                 }
-                out.println("<h1>Puntuacion: "+request.getSession().getAttribute("puntuacion")+"</h1>");
-                out.println("<h1>Racha: 0</h1>");
+                request.getSession().setAttribute("correcion", "incorrecta");
+                /*returnJson = "{'correccion':'incorrecta','puntos':+"+request.getSession().getAttribute("puntuacion")+",'racha'"+request.getSession().getAttribute("racha")+"}";
+                out.println(returnJson);
+		out.close();*/
+ /*out.println("<h1>Puntuacion: "+request.getSession().getAttribute("puntuacion")+"</h1>");
+                out.println("<h1>Racha: 0</h1>");*/
             }
-            out.println("<a href='/Trivial/MostrarPreguntaServlet'>Siguiente pregunta</a>");
+            request.getSession().setAttribute("preguntasRealizadas", (int) request.getSession().getAttribute("preguntasRealizadas") + 1);
+            request.getSession().setAttribute("preguntasRealizadasPorcentaje",
+                    (int) request.getSession().getAttribute("preguntasRealizadas") * 100 / (int) request.getSession().getAttribute("preguntasTotales"));
+            //out.println("<a href='/Trivial/MostrarPreguntaServlet'>Siguiente pregunta</a>");
             request.getSession().removeAttribute("respuestaCorrecta");
-            out.println("</body>");
-            out.println("</html>");
+            response.sendRedirect("/Trivial/MostrarPreguntaServlet");
+            /*RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/Trivial/MostrarPreguntaServlet");
+            dispatcher.forward(request, response);*/
+            /*out.println("</body>");
+            out.println("</html>");*/
         }
     }
 

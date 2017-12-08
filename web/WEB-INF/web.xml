@@ -17,8 +17,28 @@
             <param-value>#e67e22</param-value>
         </init-param>
         <init-param>
-            <param-name>ColorHistoria</param-name>
+            <param-name>colorHistoria</param-name>
             <param-value>#f1c40f</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorArte</param-name>
+            <param-value>#ba7043</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorGeografia</param-name>
+            <param-value>#5ab6c9</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorCiencias</param-name>
+            <param-value>#22ad4c</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorEspectaculos</param-name>
+            <param-value>#e58b8b</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorLiteratura</param-name>
+            <param-value>#cc6728</param-value>
         </init-param>
     </servlet>
     <servlet>

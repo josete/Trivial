@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Random;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,15 +30,23 @@ public class MostrarPreguntaServlet extends HttpServlet {
 
     String colorDeportes;
     String colorHistoria;
+    String colorArte;
+    String colorGeografia;
+    String colorCiencias;
+    String colorEspectaculos;
+    String colorLiteratura;
 
     @Override
     public void init() throws ServletException {
         colorDeportes = this.getInitParameter("colorDeportes");
         colorHistoria = this.getInitParameter("colorHistoria");
+        colorArte = this.getInitParameter("colorArte");
+        colorGeografia = this.getInitParameter("colorGeografia");
+        colorCiencias = this.getInitParameter("colorCiencias");
+        colorEspectaculos = this.getInitParameter("colorEspectaculos");
+        colorLiteratura = this.getInitParameter("colorLiteratura");
     }
-    
-    
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -55,48 +64,66 @@ public class MostrarPreguntaServlet extends HttpServlet {
             int totalDePreguntas = OperacionesBaseDeDatos.getNumeroDePreguntas();
             ArrayList<Integer> numeros;
             int totalPreguntasAMostrar = 0;
-            if(request.getSession().getAttribute("preguntasAMostrar")!=null){
-                totalPreguntasAMostrar = (int)request.getSession().getAttribute("preguntasAMostrar");
-            }else{
+            if (request.getSession().getAttribute("preguntasAMostrar") != null) {
+                totalPreguntasAMostrar = (int) request.getSession().getAttribute("preguntasAMostrar");
+            } else {
                 request.getSession().setAttribute("preguntasAMostrar", 5);
                 totalPreguntasAMostrar = 5;
             }
-            if(request.getSession().getAttribute("numeros")==null){
+            if (request.getSession().getAttribute("numeros") == null) {
                 numeros = new ArrayList<>();
                 request.getSession().setAttribute("numeros", numeros);
-            }else{
-                numeros = (ArrayList<Integer>)request.getSession().getAttribute("numeros");
+            } else {
+                numeros = (ArrayList<Integer>) request.getSession().getAttribute("numeros");
+            }
+            if (request.getSession().getAttribute("preguntasRealizadas") == null) {
+                request.getSession().setAttribute("preguntasRealizadas",0);
+                request.getSession().setAttribute("preguntasTotales",5);
+                request.getSession().setAttribute("preguntasRealizadasPorcentaje",0);
             }
             Random r = new Random();
             int pregunta = 0;
             boolean hayPreguntas = true;
-            if(numeros.isEmpty()){
-                pregunta = r.nextInt(totalDePreguntas -(1)+1) + 1;
+            if (numeros.isEmpty()) {
+                pregunta = r.nextInt(totalDePreguntas - (1) + 1) + 1;
                 totalPreguntasAMostrar--;
-            }else{
-                pregunta = (int)request.getSession().getAttribute("idUltimaPregunta");
+            } else {
+                pregunta = (int) request.getSession().getAttribute("idUltimaPregunta");
             }
-            if(numeros.size()==totalDePreguntas||totalPreguntasAMostrar==0){
-                hayPreguntas=false;
+            if (numeros.size() == totalDePreguntas || totalPreguntasAMostrar == 0) {
+                hayPreguntas = false;
             }
-            while(numeros.contains(pregunta) && !numeros.isEmpty()&&hayPreguntas){
-                pregunta = r.nextInt(totalDePreguntas -(1)+1) + 1;    
+            while (numeros.contains(pregunta) && !numeros.isEmpty() && hayPreguntas) {
+                pregunta = r.nextInt(totalDePreguntas - (1) + 1) + 1;
                 totalPreguntasAMostrar--;
             }
-            System.out.println("------"+pregunta);
+            System.out.println("------" + pregunta);
             numeros.add(pregunta);
             request.getSession().setAttribute("idUltimaPregunta", pregunta);
             request.getSession().setAttribute("preguntasAMostrar", totalPreguntasAMostrar);
             request.getSession().setAttribute("numeros", numeros);
             Pregunta p = OperacionesBaseDeDatos.getPreguntaConId(pregunta);
-            switch(OperacionesBaseDeDatos.getTemaConId(p.getTemaid())){
+            switch (OperacionesBaseDeDatos.getTemaConId(p.getTemaid())) {
                 case "Deportes":
-                    System.out.println("Pomgo color");
                     request.setAttribute("colorFondo", colorDeportes);
                     break;
                 case "Historia":
-                    System.out.println("Pomgo color");
                     request.setAttribute("colorFondo", colorHistoria);
+                    break;
+                case "Arte":
+                    request.setAttribute("colorFondo", colorArte);
+                    break;
+                case "Geografía":
+                    request.setAttribute("colorFondo", colorGeografia);
+                    break;
+                case "Ciencias y Naturaleza":
+                    request.setAttribute("colorFondo", colorCiencias);
+                    break;
+                case "Espectáculos":
+                    request.setAttribute("colorFondo", colorEspectaculos);
+                    break;
+                case "Literatura":
+                    request.setAttribute("colorFondo", colorLiteratura);
                     break;
             }
 //            out.println("<!DOCTYPE html>");
@@ -105,41 +132,42 @@ public class MostrarPreguntaServlet extends HttpServlet {
 //            out.println("<title>Pregunta</title>");
 //            out.println("</head>");
 //            out.println("<body>");
-            if(hayPreguntas){
+            if (hayPreguntas) {
                 //out.println("<h1>" + p.getPregunta() + "</h1>");
                 Iterator i = p.getRespuestas().entrySet().iterator();
                 request.getSession().setAttribute("pregunta", p);
                 request.getSession().setAttribute("respuestaCorrecta", p.getRespuestaCorrecta());
+                //response.addCookie(new Cookie("respuestaCorrecta", p.getRespuestaCorrecta()));
                 //out.println("<form action='/Trivial/ComprobarRespuesta' method='post'>");
                 while (i.hasNext()) {
                     Map.Entry par = (Map.Entry) i.next();
-                    request.getSession().setAttribute("res"+par.getKey().toString().toUpperCase(), par.getValue());
+                    request.getSession().setAttribute("res" + par.getKey().toString().toUpperCase(), par.getValue());
                     //out.println("<input type='radio' name='respuesta' value='"+par.getKey()+"'>" + par.getKey()+")"+par.getValue() + "</input>");
                 }
                 //out.println("<br><br><input type='submit' value='Contestar'>");
                 RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/preguntas.jsp");
                 dispatcher.forward(request, response);
-            }else{
+            } else {
                 out.println("<h1>No hay preguntas</h1>");
-                out.println("Tu puntuacion obtenidad es: "+request.getSession().getAttribute("puntuacion")+"<br>");
-                out.println("Tu racha ha sido de : "+request.getSession().getAttribute("racha")+" preguntas");
+                out.println("Tu puntuacion obtenidad es: " + request.getSession().getAttribute("puntuacion") + "<br>");
+                out.println("Tu racha ha sido de : " + request.getSession().getAttribute("racha") + " preguntas");
                 //Reset para poder volver a jugar
                 request.getSession().removeAttribute("preguntasAMostrar");
                 request.getSession().removeAttribute("idUltimaPregunta");
                 request.getSession().removeAttribute("numeros");
                 //Guardar resultados en la base de datos
-                Usuario u = (Usuario)request.getSession().getAttribute("usuario");
-                Puntuacion puntuacion = new Puntuacion(u.getId(), 
-                        (int)request.getSession().getAttribute("puntuacion"), 
-                        (int)request.getSession().getAttribute("racha"));
+                Usuario u = (Usuario) request.getSession().getAttribute("usuario");
+                Puntuacion puntuacion = new Puntuacion(u.getId(),
+                        (int) request.getSession().getAttribute("puntuacion"),
+                        (int) request.getSession().getAttribute("racha"));
                 OperacionesBaseDeDatos.insertarPuntuacion(puntuacion);
                 //Resetear puntuaciones
                 request.getSession().removeAttribute("puntuacion");
                 request.getSession().removeAttribute("racha");
             }
-            out.println("</form>");
+            /*out.println("</form>");
             out.println("</body>");
-            out.println("</html>");
+            out.println("</html>");*/
         }
     }
 

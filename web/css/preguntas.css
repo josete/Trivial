@@ -1,4 +1,66 @@
-.contenedorPreguntas{
-    padding-top: 5%;
-    padding-left: 10%;
+@font-face {
+    font-family: Spectral SC;
+    src: url('https://fonts.googleapis.com/css?family=Spectral+SC:800');
+    font-weight: bold;
+} 
+.contenedorPreguntas{    
+    border: 3px solid black;
+    padding: 20px;
+}
+
+.contenedorPreguntas h3{ 
+    text-align: center;
+    font-family: 'Spectral SC', serif;
+}
+
+.contenedor{
+    margin: auto;
+    margin-top:10%;
+    width: 70%;
+    overflow: hidden;
+}
+
+.mitad{
+    width: 50%;
+    float: left;
+}
+
+.respuestas{
+    content: "";
+    clear: both;
+    display: table;
+    width: 100%;
+}
+
+.ancho{
+    width: 95% !important;
+}
+
+.barraProgresoContenedor{
+    margin-top:20px;
+    height: 30px;
+    background-color: lightgray;
+    border-radius: 15px;
+    padding: 2px;
+}
+
+.barraProgreso{
+    background-color: #02547D;   
+    height: 100%;
+    border-radius: 15px;
+}
+
+.mensaje{
+    padding: 5px;
+    margin-top:20px;
+    border-radius: 5px;
+    height: 40px;
+}
+
+.correcta{
+    background-color: #6acc94;
+}
+
+.incorrecta{
+    background-color: #db4151;
 }
