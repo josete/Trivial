@@ -58,9 +58,7 @@ public class MostrarPreguntaServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             int totalDePreguntas = OperacionesBaseDeDatos.getNumeroDePreguntas();
             ArrayList<Integer> numeros;
             int totalPreguntasAMostrar = 0;
@@ -90,7 +88,7 @@ public class MostrarPreguntaServlet extends HttpServlet {
             } else {
                 pregunta = (int) request.getSession().getAttribute("idUltimaPregunta");
             }
-            if (numeros.size() == totalDePreguntas || totalPreguntasAMostrar == 0) {
+            if (numeros.size() == totalDePreguntas || totalPreguntasAMostrar <= 0) {
                 hayPreguntas = false;
             }
             while (numeros.contains(pregunta) && !numeros.isEmpty() && hayPreguntas) {
@@ -126,48 +124,39 @@ public class MostrarPreguntaServlet extends HttpServlet {
                     request.setAttribute("colorFondo", colorLiteratura);
                     break;
             }
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Pregunta</title>");
-//            out.println("</head>");
-//            out.println("<body>");
             if (hayPreguntas) {
-                //out.println("<h1>" + p.getPregunta() + "</h1>");
+                System.out.println((int)request.getSession().getAttribute("preguntasAMostrar"));
                 Iterator i = p.getRespuestas().entrySet().iterator();
                 request.getSession().setAttribute("pregunta", p);
                 request.getSession().setAttribute("respuestaCorrecta", p.getRespuestaCorrecta());
-                //response.addCookie(new Cookie("respuestaCorrecta", p.getRespuestaCorrecta()));
-                //out.println("<form action='/Trivial/ComprobarRespuesta' method='post'>");
                 while (i.hasNext()) {
                     Map.Entry par = (Map.Entry) i.next();
                     request.getSession().setAttribute("res" + par.getKey().toString().toUpperCase(), par.getValue());
-                    //out.println("<input type='radio' name='respuesta' value='"+par.getKey()+"'>" + par.getKey()+")"+par.getValue() + "</input>");
                 }
-                //out.println("<br><br><input type='submit' value='Contestar'>");
                 RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/preguntas.jsp");
                 dispatcher.forward(request, response);
             } else {
-                out.println("<h1>No hay preguntas</h1>");
+                response.sendRedirect("/Trivial/FinalizarPartidaServlet");
+                /*out.println("<h1>No hay preguntas</h1>");
                 out.println("Tu puntuacion obtenidad es: " + request.getSession().getAttribute("puntuacion") + "<br>");
-                out.println("Tu racha ha sido de : " + request.getSession().getAttribute("racha") + " preguntas");
+                out.println("Tu racha ha sido de : " + request.getSession().getAttribute("racha") + " preguntas");*/
                 //Reset para poder volver a jugar
-                request.getSession().removeAttribute("preguntasAMostrar");
+                /*request.getSession().removeAttribute("preguntasAMostrar");
                 request.getSession().removeAttribute("idUltimaPregunta");
                 request.getSession().removeAttribute("numeros");
+                request.getSession().removeAttribute("preguntasRealizadas");
+                request.getSession().removeAttribute("preguntasRealizadasPorcentaje");
                 //Guardar resultados en la base de datos
                 Usuario u = (Usuario) request.getSession().getAttribute("usuario");
                 Puntuacion puntuacion = new Puntuacion(u.getId(),
                         (int) request.getSession().getAttribute("puntuacion"),
-                        (int) request.getSession().getAttribute("racha"));
+                        (int) request.getSession().getAttribute("maxRacha"));
                 OperacionesBaseDeDatos.insertarPuntuacion(puntuacion);
                 //Resetear puntuaciones
                 request.getSession().removeAttribute("puntuacion");
                 request.getSession().removeAttribute("racha");
+                request.getSession().removeAttribute("maxRacha");*/
             }
-            /*out.println("</form>");
-            out.println("</body>");
-            out.println("</html>");*/
         }
     }
 

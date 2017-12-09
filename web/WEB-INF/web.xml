@@ -61,6 +61,10 @@
         <servlet-name>logout</servlet-name>
         <servlet-class>ServletsDeJuego.logout</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FinalizarPartidaServlet</servlet-name>
+        <servlet-class>ServletsDeJuego.FinalizarPartidaServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertarPreguntaServlet</servlet-name>
         <url-pattern>/InsertarPreguntaServlet</url-pattern>
@@ -92,6 +96,10 @@
     <servlet-mapping>
         <servlet-name>logout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FinalizarPartidaServlet</servlet-name>
+        <url-pattern>/FinalizarPartidaServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

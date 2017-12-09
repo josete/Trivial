@@ -19,7 +19,7 @@
     <body>
         <%@include file="header.html"%>
         <div class="botones">
-            <a href="/Trivial/MostrarPreguntaServlet" class="btn btn-lg btn-default">Soltiario</a>
+            <a href="/Trivial/MostrarPreguntaServlet" class="btn btn-lg btn-default">Solitario</a>
             <a class="btn btn-lg btn-default">Buscar contrincante</a>
             <a class="btn btn-lg btn-default">Crear Sala</a>
         </div>

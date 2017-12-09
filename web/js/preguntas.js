@@ -1,4 +1,4 @@
 $(document).ready(function () {
-    $("#mensajeCorrecion").fadeOut(3000);
+    $("#mensajeCorrecion").fadeOut(4000);
 });
 
