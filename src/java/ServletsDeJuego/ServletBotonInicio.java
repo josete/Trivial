@@ -5,14 +5,10 @@
  */
 package ServletsDeJuego;
 
-import BaseDeDatos.OperacionesBaseDeDatos;
-import Objetos.Puntuacion;
-import Objetos.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Familia
  */
-public class FinalizarPartidaServlet extends HttpServlet {
+public class ServletBotonInicio extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,39 +37,12 @@ public class FinalizarPartidaServlet extends HttpServlet {
         request.getSession().removeAttribute("preguntasRealizadas");
         request.getSession().removeAttribute("preguntasRealizadasPorcentaje");
         request.getSession().removeAttribute("correcion");
-        //Guardar resultados en la base de datos
-        Usuario u = (Usuario) request.getSession().getAttribute("usuario");
-        Puntuacion puntuacion = new Puntuacion(u.getId(),
-                (int) request.getSession().getAttribute("puntuacion"),
-                (int) request.getSession().getAttribute("maxRacha"));
-        OperacionesBaseDeDatos.insertarPuntuacion(puntuacion);
-        //Almacenar valores en las cookies para poder mostrarlos
-        Cookie[] cookies = request.getCookies();
-        boolean esta = false;
-        for (Cookie c : cookies) {
-            if (c.getName().equals("puntuacion")) {
-                c.setValue(String.valueOf(request.getSession().getAttribute("puntuacion")));
-                response.addCookie(c);
-                esta = true;
-            }
-            if (c.getName().equals("maxRacha")) {
-                c.setValue(String.valueOf(request.getSession().getAttribute("maxRacha")));
-                response.addCookie(c);
-                esta = true;
-            }
-        }
-        if (!esta) {
-            Cookie puntuacionCookie = new Cookie("puntuacion", String.valueOf(request.getSession().getAttribute("puntuacion")));
-            Cookie maxRachaCookie = new Cookie("maxRacha", String.valueOf(request.getSession().getAttribute("maxRacha")));
-            response.addCookie(puntuacionCookie);
-            response.addCookie(maxRachaCookie);
-        }
         //Resetear puntuaciones
         request.getSession().removeAttribute("puntuacion");
         request.getSession().removeAttribute("racha");
         request.getSession().removeAttribute("maxRacha");
         //Redirigir al menu de decision con la puntuacion total
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/finalizar.jsp");
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/dashboard.jsp");
         dispatcher.forward(request, response);
     }
 

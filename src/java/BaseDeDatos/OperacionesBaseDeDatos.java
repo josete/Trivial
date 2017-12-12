@@ -339,14 +339,14 @@ public class OperacionesBaseDeDatos {
         try {
             c = ConexionBaseDeDatos.getConexion();
             preparedStatement = c.prepareStatement(sql);
+            preparedStatement.setInt(2, sala.getId());
+            preparedStatement.setInt(1, u.getId());
             preparedStatement.executeUpdate();
-            preparedStatement.setInt(1, sala.getId());
-            preparedStatement.setInt(2, u.getId());
             //Consigue el ultimo id insertado
-            rs = preparedStatement.getGeneratedKeys();
-            rs.next();
-            auto_id = rs.getInt(1);
-            sala.setId(auto_id);
+            //rs = preparedStatement.getGeneratedKeys();
+            //rs.next();
+            //auto_id = rs.getInt(1);
+            //sala.setId(auto_id);
         } catch (SQLException ex) {
             Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

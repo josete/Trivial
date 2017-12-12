@@ -39,6 +39,17 @@ public class Sala {
     public void setId(int id) {
         this.id = id;
     }
+
+    public ArrayList<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(ArrayList<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+    
+    
+    
     
     
     

@@ -21,7 +21,7 @@
         <div class="botones">
             <a href="/Trivial/MostrarPreguntaServlet" class="btn btn-lg btn-default">Solitario</a>
             <a class="btn btn-lg btn-default">Buscar contrincante</a>
-            <a class="btn btn-lg btn-default">Crear Sala</a>
+            <a href="/Trivial/CrearSala" class="btn btn-lg btn-default">Crear Sala</a>
         </div>
     </body>
 </html>

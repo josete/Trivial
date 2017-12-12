@@ -5,10 +5,13 @@
  */
 package ServletsDeJuego;
 
+import BaseDeDatos.DataStorage;
 import BaseDeDatos.OperacionesBaseDeDatos;
 import Objetos.Sala;
+import Objetos.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,22 +33,15 @@ public class CrearSala extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+            throws ServletException, IOException {        
         Sala s = new Sala();
         OperacionesBaseDeDatos.insertarSala(s);
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CrearSala</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>El id de la sala es: " + s.getId() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        s.anadirUsuario((Usuario)request.getSession().getAttribute("usuario"));
+        OperacionesBaseDeDatos.insertarUsuarioEnSala(s,(Usuario)request.getSession().getAttribute("usuario"));
+        DataStorage.getInstance().insertarSala(s); //Guaramos la sala en un almacenamineto
+        request.getSession().setAttribute("sala", s);
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/sala.jsp");
+        dispatcher.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
