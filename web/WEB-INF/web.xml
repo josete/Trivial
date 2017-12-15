@@ -69,6 +69,10 @@
         <servlet-name>ServletBotonInicio</servlet-name>
         <servlet-class>ServletsDeJuego.ServletBotonInicio</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RefrescarSala</servlet-name>
+        <servlet-class>ServletsDeJuego.RefrescarSala</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertarPreguntaServlet</servlet-name>
         <url-pattern>/InsertarPreguntaServlet</url-pattern>
@@ -108,6 +112,10 @@
     <servlet-mapping>
         <servlet-name>ServletBotonInicio</servlet-name>
         <url-pattern>/ServletBotonInicio</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RefrescarSala</servlet-name>
+        <url-pattern>/RefrescarSala</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

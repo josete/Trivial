@@ -22,6 +22,7 @@
             <a href="/Trivial/MostrarPreguntaServlet" class="btn btn-lg btn-default">Solitario</a>
             <a class="btn btn-lg btn-default">Buscar contrincante</a>
             <a href="/Trivial/CrearSala" class="btn btn-lg btn-default">Crear Sala</a>
+            <a href="#" class="btn btn-lg btn-default">Unirse a Sala</a>
         </div>
     </body>
 </html>
