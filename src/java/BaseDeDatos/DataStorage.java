@@ -26,7 +26,12 @@ public class DataStorage {
     }
     
     public static void insertarSala(Sala s){
+        System.out.println("Inserto sala con id "+s.getId());
         salas.put(s.getId(), s);
+    }
+    
+    public static Sala getSala(int id){
+        return salas.get(id);
     }
     
 }

@@ -10,8 +10,6 @@ import BaseDeDatos.OperacionesBaseDeDatos;
 import Objetos.Sala;
 import Objetos.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Portatil
+ * @author Familia
  */
-public class CrearSala extends HttpServlet {
+public class UnirseASala extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,16 +31,14 @@ public class CrearSala extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {        
-        Sala s = new Sala();
-        
-        OperacionesBaseDeDatos.insertarSala(s);
+            throws ServletException, IOException {
+        int idSala = Integer.valueOf(request.getParameter("idSala"));
+        Sala s = DataStorage.getInstance().getSala(idSala);
         
         s.anadirUsuario((Usuario)request.getSession().getAttribute("usuario"));
         OperacionesBaseDeDatos.insertarUsuarioEnSala(s,(Usuario)request.getSession().getAttribute("usuario"));
-        DataStorage.getInstance().insertarSala(s); //Guaramos la sala en un almacenamineto
         
-        request.getSession().setAttribute("sala", s);
+        request.getSession().setAttribute("sala",s );
         response.sendRedirect("/Trivial/RefrescarSala");
     }
 

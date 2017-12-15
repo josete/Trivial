@@ -22,7 +22,29 @@
             <a href="/Trivial/MostrarPreguntaServlet" class="btn btn-lg btn-default">Solitario</a>
             <a class="btn btn-lg btn-default">Buscar contrincante</a>
             <a href="/Trivial/CrearSala" class="btn btn-lg btn-default">Crear Sala</a>
-            <a href="#" class="btn btn-lg btn-default">Unirse a Sala</a>
+            <a data-toggle="modal" data-target="#unirseSala" class="btn btn-lg btn-default">Unirse a Sala</a>
+        </div>
+        <div id="unirseSala" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Unirse a sala</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/Trivial/UnirseASala" method="POST">
+                            <div class="form-group">
+                                <label for="idSala">Id de la sala:</label>
+                                <input type="text" class="form-control" id="idSala" name="idSala">
+                            </div>
+                            <button type="submit" class="btn btn-default">Unirse</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>
