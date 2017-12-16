@@ -3,6 +3,6 @@ $(document).ready(function () {
 });
 
 function refrescar(){
-    
+    location.reload();
 }
 
