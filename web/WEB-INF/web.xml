@@ -77,6 +77,14 @@
         <servlet-name>UnirseASala</servlet-name>
         <servlet-class>ServletsDeJuego.UnirseASala</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MultijugadorServlet</servlet-name>
+        <servlet-class>ServletsDeJuego.MultijugadorServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MostrarPreguntaMultijugadorServlet</servlet-name>
+        <servlet-class>ServletsDeJuego.MostrarPreguntaMultijugadorServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertarPreguntaServlet</servlet-name>
         <url-pattern>/InsertarPreguntaServlet</url-pattern>
@@ -124,6 +132,14 @@
     <servlet-mapping>
         <servlet-name>UnirseASala</servlet-name>
         <url-pattern>/UnirseASala</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MultijugadorServlet</servlet-name>
+        <url-pattern>/MultijugadorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MostrarPreguntaMultijugadorServlet</servlet-name>
+        <url-pattern>/MostrarPreguntaMultijugadorServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

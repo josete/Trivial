@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -30,6 +31,10 @@
                     ${item.nombre}<br>
                 </c:forEach>
             </div>
+            <br>
+            <c:if test="${fn:length(sala.usuarios) gt 1}">
+                <a class="btn btn-lg btn-default" href="/Trivial/MultijugadorServlet">Listo</a>
+            </c:if>            
         </div>
     </body>
 </html>

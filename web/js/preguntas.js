@@ -3,6 +3,10 @@ $(document).ready(function () {
 });
 
 function refrescar(){
-    location.reload();
+    location.reload(true);
+}
+
+function redirigir(url){
+    window.location.replace(url);
 }
 

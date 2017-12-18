@@ -6,6 +6,8 @@
 package Objetos;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -16,16 +18,22 @@ public class Sala {
     int id;
     ArrayList<Usuario> usuarios;
     ArrayList<Tema> temas;
+    Map<Integer,Boolean> listo;
+    int turno;
+    int pasos = -1;
+    
 
     public Sala(int id) {
         this.id = id;
         usuarios = new ArrayList<>();
         temas = new ArrayList<>();
+        listo = new HashMap<>();
     }
 
     public Sala() {
         usuarios = new ArrayList<>();
         temas = new ArrayList<>();
+        listo = new HashMap<>();
     }
     
     public void anadirUsuario(Usuario u){
@@ -48,9 +56,37 @@ public class Sala {
         this.usuarios = usuarios;
     }
     
+    public void listo(Usuario u){        
+        for(Usuario us: usuarios){
+            if(us.getId()==u.getId()){
+                listo.put(usuarios.indexOf(us), Boolean.TRUE);
+            }
+        }
+    }
     
-    
-    
+    public void correrTurno(){
+        pasos++;
+        if(pasos>usuarios.size()){
+            pasos=-1;
+        }
+        turno = usuarios.get(pasos).getId();
+    }
+
+    public Map<Integer, Boolean> getListo() {
+        return listo;
+    }
+
+    public void setListo(Map<Integer, Boolean> listo) {
+        this.listo = listo;
+    } 
+
+    public int getTurno() {
+        return turno;
+    }
+
+    public void setTurno(int turno) {
+        this.turno = turno;
+    }
     
     
     
