@@ -84,6 +84,42 @@
     <servlet>
         <servlet-name>MostrarPreguntaMultijugadorServlet</servlet-name>
         <servlet-class>ServletsDeJuego.MostrarPreguntaMultijugadorServlet</servlet-class>
+        <init-param>
+            <param-name>colorDeportes</param-name>
+            <param-value>#e67e22</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorHistoria</param-name>
+            <param-value>#f1c40f</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorArte</param-name>
+            <param-value>#ba7043</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorGeografia</param-name>
+            <param-value>#5ab6c9</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorCiencias</param-name>
+            <param-value>#22ad4c</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorEspectaculos</param-name>
+            <param-value>#e58b8b</param-value>
+        </init-param>
+        <init-param>
+            <param-name>colorLiteratura</param-name>
+            <param-value>#cc6728</param-value>
+        </init-param>
+    </servlet>
+    <servlet>
+        <servlet-name>ComprobarRespuestaMulti</servlet-name>
+        <servlet-class>ServletsDeJuego.ComprobarRespuestaMulti</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FinalizarPartidaMultijugadorServlet</servlet-name>
+        <servlet-class>ServletsDeJuego.FinalizarPartidaMultijugadorServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>InsertarPreguntaServlet</servlet-name>
@@ -140,6 +176,14 @@
     <servlet-mapping>
         <servlet-name>MostrarPreguntaMultijugadorServlet</servlet-name>
         <url-pattern>/MostrarPreguntaMultijugadorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ComprobarRespuestaMulti</servlet-name>
+        <url-pattern>/ComprobarRespuestaMulti</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FinalizarPartidaMultijugadorServlet</servlet-name>
+        <url-pattern>/FinalizarPartidaMultijugadorServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

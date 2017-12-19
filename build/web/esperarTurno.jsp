@@ -1,6 +1,6 @@
 <%-- 
-    Document   : EsperandoJugadores
-    Created on : 18-dic-2017, 10:11:46
+    Document   : esperarTurno
+    Created on : 19-dic-2017, 11:02:04
     Author     : Familia
 --%>
 
@@ -15,18 +15,19 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/navbar.css">
         <link rel="stylesheet" href="css/preguntas.css">
-        <link rel="stylesheet" href="css/sala.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="js/preguntas.js"></script>
-        <title>Esperando ...</title>
+        <title>Espera de turno</title>
     </head>
     <body>
         <%@include file="header.html"%>
         <div class="contenedor">
-            <h1>Esperando al resto de jugadores</h1>
-            <c:if test="${fn:length(sala.usuarios) eq fn:length(sala.listo)}">
-                <script>redirigir("/Trivial/esperarTurno.jsp")</script>
+            <c:if test="${sala.turno ne usuario.id}">
+                <h1>Esperando tu turno</h1>
+            </c:if>
+            <c:if test="${sala.turno eq usuario.id}">
+                <script>redirigir("/Trivial/MostrarPreguntaMultijugadorServlet")</script>
             </c:if>
         </div>
     </body>

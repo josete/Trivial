@@ -19,8 +19,9 @@ public class Sala {
     ArrayList<Usuario> usuarios;
     ArrayList<Tema> temas;
     Map<Integer,Boolean> listo;
+    ArrayList<Usuario> finalizada;
     int turno;
-    int pasos = -1;
+    int pasos = 0;
     
 
     public Sala(int id) {
@@ -28,16 +29,19 @@ public class Sala {
         usuarios = new ArrayList<>();
         temas = new ArrayList<>();
         listo = new HashMap<>();
+        finalizada = new ArrayList<>();
     }
 
     public Sala() {
         usuarios = new ArrayList<>();
         temas = new ArrayList<>();
         listo = new HashMap<>();
+        finalizada = new ArrayList<>();
     }
     
     public void anadirUsuario(Usuario u){
         this.usuarios.add(u);
+        turno = usuarios.get(0).getId();
     }
 
     public int getId() {
@@ -66,10 +70,18 @@ public class Sala {
     
     public void correrTurno(){
         pasos++;
-        if(pasos>usuarios.size()){
-            pasos=-1;
+        if(pasos>=usuarios.size()){
+            pasos=0;
         }
-        turno = usuarios.get(pasos).getId();
+        if(finalizada.contains(usuarios.get(pasos))){
+            correrTurno();
+        }else{
+            turno = usuarios.get(pasos).getId();
+        }
+    }
+    
+    public void eliminarJugadorDeLaLista(Usuario u){
+        finalizada.add(u);
     }
 
     public Map<Integer, Boolean> getListo() {

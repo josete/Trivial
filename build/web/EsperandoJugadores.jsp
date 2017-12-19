@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta http-equiv="refresh" content="5;">
+        <meta http-equiv="refresh" content="3;">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/navbar.css">
         <link rel="stylesheet" href="css/preguntas.css">
@@ -24,8 +24,9 @@
     <body>
         <%@include file="header.html"%>
         <div class="contenedor">
+            <h1>Esperando al resto de jugadores</h1>
             <c:if test="${fn:length(sala.usuarios) eq fn:length(sala.listo)}">
-                <script>redirigir("/Trivial/MostrarPreguntaMultijugadorServlet")</script>
+                <script>redirigir("/Trivial/esperarTurno.jsp")</script>
             </c:if>
         </div>
     </body>

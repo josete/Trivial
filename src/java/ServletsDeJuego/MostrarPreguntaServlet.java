@@ -58,7 +58,6 @@ public class MostrarPreguntaServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try (PrintWriter out = response.getWriter()) {
             int totalDePreguntas = OperacionesBaseDeDatos.getNumeroDePreguntas();
             ArrayList<Integer> numeros;
             int totalPreguntasAMostrar = 0;
@@ -157,7 +156,6 @@ public class MostrarPreguntaServlet extends HttpServlet {
                 request.getSession().removeAttribute("racha");
                 request.getSession().removeAttribute("maxRacha");*/
             }
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
