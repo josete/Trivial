@@ -34,12 +34,16 @@ public class UnirseASala extends HttpServlet {
             throws ServletException, IOException {
         int idSala = Integer.valueOf(request.getParameter("idSala"));
         Sala s = DataStorage.getInstance().getSala(idSala);
-        
-        s.anadirUsuario((Usuario)request.getSession().getAttribute("usuario"));
-        OperacionesBaseDeDatos.insertarUsuarioEnSala(s,(Usuario)request.getSession().getAttribute("usuario"));
-        
-        request.getSession().setAttribute("sala",s );
-        response.sendRedirect("/Trivial/RefrescarSala");
+
+        if (!s.isBloqueada()) {
+            s.anadirUsuario((Usuario) request.getSession().getAttribute("usuario"));
+            OperacionesBaseDeDatos.insertarUsuarioEnSala(s, (Usuario) request.getSession().getAttribute("usuario"));
+            s.bloquear();
+            request.getSession().setAttribute("sala", s);
+            response.sendRedirect("/Trivial/RefrescarSala");
+        }else{
+            //Nada
+        }        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

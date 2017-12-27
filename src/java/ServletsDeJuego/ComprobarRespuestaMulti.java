@@ -70,6 +70,8 @@ public class ComprobarRespuestaMulti extends HttpServlet {
                 Sala s = (Sala)request.getSession().getAttribute("sala");
                 s.correrTurno();
             }
+            Sala s = (Sala)request.getSession().getAttribute("sala");
+            s.siguientePregunta();
             request.getSession().setAttribute("preguntasRealizadas", (int) request.getSession().getAttribute("preguntasRealizadas") + 1);
             request.getSession().setAttribute("preguntasRealizadasPorcentaje",
                     (int) request.getSession().getAttribute("preguntasRealizadas") * 100 / (int) request.getSession().getAttribute("preguntasTotales"));

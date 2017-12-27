@@ -25,6 +25,8 @@ public class Sala {
     Queue<Pregunta> preguntasCola;
     int turno;
     int pasos = 0;
+    boolean bloqueada = false;
+    int preguntaActual = 0;
     
 
     public Sala(int id) {
@@ -130,8 +132,29 @@ public class Sala {
     public Pregunta getSiguientePregunta(){
         return preguntasCola.poll();
     }
+
+    public boolean isBloqueada() {
+        return bloqueada;
+    }
+
+    public void setBloqueada(boolean bloqueada) {
+        this.bloqueada = bloqueada;
+    }
     
+    public void bloquear(){
+        this.bloqueada = true;
+    }
+
+    public int getPreguntaActual() {
+        return preguntaActual;
+    }
+
+    public void setPreguntaActual(int preguntaActual) {
+        this.preguntaActual = preguntaActual;
+    }
     
-    
-    
+    public void siguientePregunta(){
+        this.preguntaActual++;
+    }
+
 }
