@@ -11,10 +11,12 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,14 +43,14 @@ public class NuevoUsuarioServlet extends HttpServlet {
         String nombre = request.getParameter("nombre");
         String contrasena = request.getParameter("contrasena");
         String email = request.getParameter("email");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet NuevoUsuarioServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
+//        try (PrintWriter out = response.getWriter()) {
+//            /* TODO output your page here. You may use following sample code. */
+//            out.println("<!DOCTYPE html>");
+//            out.println("<html>");
+//            out.println("<head>");
+//            out.println("<title>Servlet NuevoUsuarioServlet</title>");
+//            out.println("</head>");
+//            out.println("<body>");
             if (isValidEmailAddress(email)) {
                 MessageDigest md;
                 try {
@@ -64,14 +66,23 @@ public class NuevoUsuarioServlet extends HttpServlet {
                     OperacionesBaseDeDatos.insertarUsuario(u);
                 } catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(NuevoUsuarioServlet.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    if(ex.getMessage().contains("Duplicate")){
+                        request.setAttribute("errorRegistro", "El nombre o el email ya existen");
+                        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/RegistroIncorrecto.jsp");
+                        dispatcher.forward(request, response);
+                    }
                 }
-                out.println("<h1>Usuario creado con exito</h1>");
+//                out.println("<h1>Usuario creado con exito</h1>");
+                    response.sendRedirect("/Trivial/RegistroCorrecto.html");
             } else {
-                out.println("<h1>Email no valido</h1>");
+                request.setAttribute("errorRegistro", "Email no valido");
+                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/RegistroIncorrecto.jsp");
+                dispatcher.forward(request, response);
             }
-            out.println("</body>");
-            out.println("</html>");
-        }
+//            out.println("</body>");
+//            out.println("</html>");
+//        }
     }
 
     public static boolean isValidEmailAddress(String email) {

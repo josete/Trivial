@@ -40,7 +40,7 @@ public class LoginServlet extends HttpServlet {
                 RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/dashboard.jsp");
                 dispatcher.forward(request, response);
             }else{
-                //Forward
+                response.sendRedirect("/Trivial/LoginIncorrecto.html");
             }
     }
 
