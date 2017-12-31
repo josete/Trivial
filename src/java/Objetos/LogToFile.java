@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 
 /**
@@ -33,7 +34,8 @@ public class LogToFile {
     }
 
     public static void escribir(String mensaje) {
-        pw.println(mensaje);
+        String fecha = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
+        pw.println(fecha+": "+mensaje);
     }
 
     public static void cerrar() {
