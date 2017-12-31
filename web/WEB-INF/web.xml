@@ -7,7 +7,7 @@
     <servlet>
         <servlet-name>CrearConexionBaseDeDatos</servlet-name>
         <servlet-class>BaseDeDatos.CrearConexionBaseDeDatos</servlet-class>
-        <load-on-startup>0</load-on-startup>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
         <servlet-name>MostrarPreguntaServlet</servlet-name>
@@ -121,6 +121,11 @@
         <servlet-name>FinalizarPartidaMultijugadorServlet</servlet-name>
         <servlet-class>ServletsDeJuego.FinalizarPartidaMultijugadorServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LoggerServlet</servlet-name>
+        <servlet-class>ServletsDeJuego.LoggerServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertarPreguntaServlet</servlet-name>
         <url-pattern>/InsertarPreguntaServlet</url-pattern>
@@ -196,6 +201,10 @@
         <res-auth>Container</res-auth>
         <res-sharing-scope>Shareable</res-sharing-scope>
     </resource-ref>
+    <context-param>
+        <param-name>rutaLog</param-name>
+        <param-value>trivial.log</param-value>
+    </context-param>
     <filter>
         <filter-name>FiltroLogin</filter-name>
         <filter-class>Filtros.FiltroLogin</filter-class>

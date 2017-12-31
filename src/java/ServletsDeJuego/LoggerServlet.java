@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package BaseDeDatos;
+package ServletsDeJuego;
 
 import Objetos.LogToFile;
 import java.io.IOException;
@@ -15,15 +15,21 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Portatil
+ * @author Familia
  */
-public class CrearConexionBaseDeDatos extends HttpServlet {
+public class LoggerServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        super.init(); //To change body of generated methods, choose Tools | Templates.
-        LogToFile.escribir("Creacion de la conexion a la base de datos");
-        ConexionBaseDeDatos conexion = new ConexionBaseDeDatos();
+        String archivo = (String)this.getServletContext().getInitParameter("rutaLog");
+        new LogToFile(archivo);
     }
-   
+
+    @Override
+    public void destroy() {
+        LogToFile.cerrar();
+    }
+
+    
+
 }
