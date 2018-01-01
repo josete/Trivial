@@ -76,13 +76,14 @@ public class FinalizarPartidaMultijugadorServlet extends HttpServlet {
         //Pasar turno
         Sala s = (Sala) request.getSession().getAttribute("sala");
         s.correrTurno();
-        s.eliminarJugadorDeLaLista(u);
+        request.setAttribute("ganador", s.getGanador());
         //Resetear puntuaciones
         request.getSession().removeAttribute("puntuacion");
         request.getSession().removeAttribute("racha");
         request.getSession().removeAttribute("maxRacha");
+        request.getSession().removeAttribute("sala");
         //Redirigir al menu de decision con la puntuacion total
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/finalizar.jsp");
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/finalizarMultijugador.jsp");
         dispatcher.forward(request, response);
     }
 

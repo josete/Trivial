@@ -7,6 +7,7 @@ package Objetos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
@@ -16,18 +17,18 @@ import java.util.Queue;
  * @author Portatil
  */
 public class Sala {
-    
+
     int id;
     ArrayList<Usuario> usuarios;
     ArrayList<Pregunta> preguntas;
-    Map<Integer,Boolean> listo;
+    Map<Integer, Boolean> listo;
     ArrayList<Usuario> finalizada;
     Queue<Pregunta> preguntasCola;
     int turno;
     int pasos = 0;
     boolean bloqueada = false;
     int preguntaActual = 0;
-    
+    Map<String, Integer> puntuaciones;
 
     public Sala(int id) {
         this.id = id;
@@ -35,6 +36,7 @@ public class Sala {
         preguntas = new ArrayList<>();
         listo = new HashMap<>();
         finalizada = new ArrayList<>();
+        puntuaciones = new HashMap<>();
     }
 
     public Sala() {
@@ -42,9 +44,10 @@ public class Sala {
         preguntas = new ArrayList<>();
         listo = new HashMap<>();
         finalizada = new ArrayList<>();
+        puntuaciones = new HashMap<>();
     }
-    
-    public void anadirUsuario(Usuario u){
+
+    public void anadirUsuario(Usuario u) {
         this.usuarios.add(u);
         turno = usuarios.get(0).getId();
     }
@@ -64,28 +67,28 @@ public class Sala {
     public void setUsuarios(ArrayList<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
-    
-    public void listo(Usuario u){        
-        for(Usuario us: usuarios){
-            if(us.getId()==u.getId()){
+
+    public void listo(Usuario u) {
+        for (Usuario us : usuarios) {
+            if (us.getId() == u.getId()) {
                 listo.put(usuarios.indexOf(us), Boolean.TRUE);
             }
         }
     }
-    
-    public void correrTurno(){
+
+    public void correrTurno() {
         pasos++;
-        if(pasos>=usuarios.size()){
-            pasos=0;
+        if (pasos >= usuarios.size()) {
+            pasos = 0;
         }
-        if(finalizada.contains(usuarios.get(pasos))){
+        if (finalizada.contains(usuarios.get(pasos))) {
             correrTurno();
-        }else{
+        } else {
             turno = usuarios.get(pasos).getId();
         }
     }
-    
-    public void eliminarJugadorDeLaLista(Usuario u){
+
+    public void eliminarJugadorDeLaLista(Usuario u) {
         finalizada.add(u);
     }
 
@@ -95,7 +98,7 @@ public class Sala {
 
     public void setListo(Map<Integer, Boolean> listo) {
         this.listo = listo;
-    } 
+    }
 
     public int getTurno() {
         return turno;
@@ -112,12 +115,12 @@ public class Sala {
     public void setPreguntas(ArrayList<Pregunta> preguntas) {
         this.preguntas = preguntas;
     }
-    
-    public void anadirPregunta(Pregunta p){
+
+    public void anadirPregunta(Pregunta p) {
         preguntas.add(p);
     }
-    
-    public void convertirACola(){
+
+    public void convertirACola() {
         preguntasCola = new LinkedList<>(preguntas);
     }
 
@@ -128,8 +131,8 @@ public class Sala {
     public void setPreguntasCola(Queue<Pregunta> preguntasCola) {
         this.preguntasCola = preguntasCola;
     }
-    
-    public Pregunta getSiguientePregunta(){
+
+    public Pregunta getSiguientePregunta() {
         return preguntasCola.poll();
     }
 
@@ -140,8 +143,8 @@ public class Sala {
     public void setBloqueada(boolean bloqueada) {
         this.bloqueada = bloqueada;
     }
-    
-    public void bloquear(){
+
+    public void bloquear() {
         this.bloqueada = true;
     }
 
@@ -152,9 +155,27 @@ public class Sala {
     public void setPreguntaActual(int preguntaActual) {
         this.preguntaActual = preguntaActual;
     }
-    
-    public void siguientePregunta(){
+
+    public void siguientePregunta() {
         this.preguntaActual++;
+    }
+
+    public void anadirPuntuacion(Usuario u, int puntuacion) {
+        puntuaciones.put(u.getNombre(), puntuacion);
+    }
+
+    public String getGanador() {
+        int maxPuntuacion = 0;
+        String nombre = "";
+        Iterator it = puntuaciones.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if((Integer)pair.getValue()>maxPuntuacion){
+                maxPuntuacion = (Integer)pair.getValue();
+                nombre = pair.getKey().toString();
+            }
+        }
+        return nombre;
     }
 
 }

@@ -6,6 +6,7 @@
 package ServletsDeJuego;
 
 import Objetos.Sala;
+import Objetos.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -71,6 +72,7 @@ public class ComprobarRespuestaMulti extends HttpServlet {
                 s.correrTurno();
             }
             Sala s = (Sala)request.getSession().getAttribute("sala");
+            s.anadirPuntuacion((Usuario)request.getSession().getAttribute("usuario"), (Integer)request.getSession().getAttribute("puntuacion"));
             s.siguientePregunta();
             request.getSession().setAttribute("preguntasRealizadas", (int) request.getSession().getAttribute("preguntasRealizadas") + 1);
             request.getSession().setAttribute("preguntasRealizadasPorcentaje",
