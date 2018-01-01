@@ -43,9 +43,14 @@ public class FinalizarPartidaMultijugadorServlet extends HttpServlet {
         request.getSession().removeAttribute("correcion");
         //Guardar resultados en la base de datos
         Usuario u = (Usuario) request.getSession().getAttribute("usuario");
-        Puntuacion puntuacion = new Puntuacion(u.getId(),
+        Puntuacion puntuacion;
+        if(request.getSession().getAttribute("puntuacion")!=null){
+        puntuacion = new Puntuacion(u.getId(),
                 (int) request.getSession().getAttribute("puntuacion"),
                 (int) request.getSession().getAttribute("maxRacha"));
+        }else{
+            puntuacion = new Puntuacion(u.getId(),0,0);
+        }
         OperacionesBaseDeDatos.insertarPuntuacion(puntuacion);
         //Almacenar valores en las cookies para poder mostrarlos
         Cookie[] cookies = request.getCookies();

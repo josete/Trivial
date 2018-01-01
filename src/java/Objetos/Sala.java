@@ -7,7 +7,9 @@ package Objetos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 /**
  *
@@ -17,24 +19,27 @@ public class Sala {
     
     int id;
     ArrayList<Usuario> usuarios;
-    ArrayList<Tema> temas;
+    ArrayList<Pregunta> preguntas;
     Map<Integer,Boolean> listo;
     ArrayList<Usuario> finalizada;
+    Queue<Pregunta> preguntasCola;
     int turno;
     int pasos = 0;
+    boolean bloqueada = false;
+    int preguntaActual = 0;
     
 
     public Sala(int id) {
         this.id = id;
         usuarios = new ArrayList<>();
-        temas = new ArrayList<>();
+        preguntas = new ArrayList<>();
         listo = new HashMap<>();
         finalizada = new ArrayList<>();
     }
 
     public Sala() {
         usuarios = new ArrayList<>();
-        temas = new ArrayList<>();
+        preguntas = new ArrayList<>();
         listo = new HashMap<>();
         finalizada = new ArrayList<>();
     }
@@ -99,7 +104,57 @@ public class Sala {
     public void setTurno(int turno) {
         this.turno = turno;
     }
+
+    public ArrayList<Pregunta> getPreguntas() {
+        return preguntas;
+    }
+
+    public void setPreguntas(ArrayList<Pregunta> preguntas) {
+        this.preguntas = preguntas;
+    }
     
+    public void anadirPregunta(Pregunta p){
+        preguntas.add(p);
+    }
     
+    public void convertirACola(){
+        preguntasCola = new LinkedList<>(preguntas);
+    }
+
+    public Queue<Pregunta> getPreguntasCola() {
+        return preguntasCola;
+    }
+
+    public void setPreguntasCola(Queue<Pregunta> preguntasCola) {
+        this.preguntasCola = preguntasCola;
+    }
     
+    public Pregunta getSiguientePregunta(){
+        return preguntasCola.poll();
+    }
+
+    public boolean isBloqueada() {
+        return bloqueada;
+    }
+
+    public void setBloqueada(boolean bloqueada) {
+        this.bloqueada = bloqueada;
+    }
+    
+    public void bloquear(){
+        this.bloqueada = true;
+    }
+
+    public int getPreguntaActual() {
+        return preguntaActual;
+    }
+
+    public void setPreguntaActual(int preguntaActual) {
+        this.preguntaActual = preguntaActual;
+    }
+    
+    public void siguientePregunta(){
+        this.preguntaActual++;
+    }
+
 }

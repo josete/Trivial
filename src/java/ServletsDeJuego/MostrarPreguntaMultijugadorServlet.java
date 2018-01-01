@@ -7,12 +7,10 @@ package ServletsDeJuego;
 
 import BaseDeDatos.OperacionesBaseDeDatos;
 import Objetos.Pregunta;
+import Objetos.Sala;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -55,73 +53,76 @@ public class MostrarPreguntaMultijugadorServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int totalDePreguntas = OperacionesBaseDeDatos.getNumeroDePreguntas();
-        ArrayList<Integer> numeros;
-        int totalPreguntasAMostrar = 0;
-        if (request.getSession().getAttribute("preguntasAMostrar") != null) {
-            totalPreguntasAMostrar = (int) request.getSession().getAttribute("preguntasAMostrar");
-        } else {
-            request.getSession().setAttribute("preguntasAMostrar", 5);
-            totalPreguntasAMostrar = 5;
-        }
-        if (request.getSession().getAttribute("numeros") == null) {
-            numeros = new ArrayList<>();
-            request.getSession().setAttribute("numeros", numeros);
-        } else {
-            numeros = (ArrayList<Integer>) request.getSession().getAttribute("numeros");
-        }
-        if (request.getSession().getAttribute("preguntasRealizadas") == null) {
-            request.getSession().setAttribute("preguntasRealizadas", 0);
-            request.getSession().setAttribute("preguntasTotales", 5);
-            request.getSession().setAttribute("preguntasRealizadasPorcentaje", 0);
-        }
-        Random r = new Random();
-        int pregunta = 0;
-        boolean hayPreguntas = true;
-        if (numeros.isEmpty()) {
-            pregunta = r.nextInt(totalDePreguntas - (1) + 1) + 1;
-            totalPreguntasAMostrar--;
-        } else {
-            pregunta = (int) request.getSession().getAttribute("idUltimaPregunta");
-        }
-        if (numeros.size() == totalDePreguntas || totalPreguntasAMostrar <= 0) {
-            hayPreguntas = false;
-        }
-        while (numeros.contains(pregunta) && !numeros.isEmpty() && hayPreguntas) {
-            pregunta = r.nextInt(totalDePreguntas - (1) + 1) + 1;
-            totalPreguntasAMostrar--;
-        }
-        System.out.println("------" + pregunta);
-        numeros.add(pregunta);
-        request.getSession().setAttribute("idUltimaPregunta", pregunta);
-        request.getSession().setAttribute("preguntasAMostrar", totalPreguntasAMostrar);
-        request.getSession().setAttribute("numeros", numeros);
-        Pregunta p = OperacionesBaseDeDatos.getPreguntaConId(pregunta);
-        switch (OperacionesBaseDeDatos.getTemaConId(p.getTemaid())) {
-            case "Deportes":
-                request.setAttribute("colorFondo", colorDeportes);
-                break;
-            case "Historia":
-                request.setAttribute("colorFondo", colorHistoria);
-                break;
-            case "Arte":
-                request.setAttribute("colorFondo", colorArte);
-                break;
-            case "Geografía":
-                request.setAttribute("colorFondo", colorGeografia);
-                break;
-            case "Ciencias y Naturaleza":
-                request.setAttribute("colorFondo", colorCiencias);
-                break;
-            case "Espectáculos":
-                request.setAttribute("colorFondo", colorEspectaculos);
-                break;
-            case "Literatura":
-                request.setAttribute("colorFondo", colorLiteratura);
-                break;
-        }
-        if (hayPreguntas) {
-            System.out.println((int) request.getSession().getAttribute("preguntasAMostrar"));
+        Sala s = (Sala) request.getSession().getAttribute("sala");
+        Pregunta p = s.getSiguientePregunta();
+//        int totalDePreguntas = OperacionesBaseDeDatos.getNumeroDePreguntas();
+//        ArrayList<Integer> numeros;
+//        int totalPreguntasAMostrar = 0;
+//        if (request.getSession().getAttribute("preguntasAMostrar") != null) {
+//            totalPreguntasAMostrar = (int) request.getSession().getAttribute("preguntasAMostrar");
+//        } else {
+//            request.getSession().setAttribute("preguntasAMostrar", 5);
+//            totalPreguntasAMostrar = 5;
+//        }
+//        if (request.getSession().getAttribute("numeros") == null) {
+//            numeros = new ArrayList<>();
+//            request.getSession().setAttribute("numeros", numeros);
+//        } else {
+//            numeros = (ArrayList<Integer>) request.getSession().getAttribute("numeros");
+//        }
+
+//        Random r = new Random();
+//        int pregunta = 0;
+//        boolean hayPreguntas = true;
+//        if (numeros.isEmpty()) {
+//            pregunta = r.nextInt(totalDePreguntas - (1) + 1) + 1;
+//            totalPreguntasAMostrar--;
+//        } else {
+//            pregunta = (int) request.getSession().getAttribute("idUltimaPregunta");
+//        }
+//        if (numeros.size() == totalDePreguntas || totalPreguntasAMostrar <= 0) {
+//            hayPreguntas = false;
+//        }
+//        while (numeros.contains(pregunta) && !numeros.isEmpty() && hayPreguntas) {
+//            pregunta = r.nextInt(totalDePreguntas - (1) + 1) + 1;
+//            totalPreguntasAMostrar--;
+//        }
+//        System.out.println("------" + pregunta);
+//        numeros.add(pregunta);
+        //request.getSession().setAttribute("preguntasAMostrar", totalPreguntasAMostrar);
+        //request.getSession().setAttribute("numeros", numeros);
+        //Pregunta p = OperacionesBaseDeDatos.getPreguntaConId(pregunta);
+        if (p != null) {
+            if (request.getSession().getAttribute("preguntasRealizadas") == null) {
+                request.getSession().setAttribute("preguntasRealizadas", 0);
+                request.getSession().setAttribute("preguntasTotales", s.getPreguntas().size());
+                request.getSession().setAttribute("preguntasRealizadasPorcentaje", 0);
+            }
+            request.getSession().setAttribute("idUltimaPregunta", p.getId());
+            switch (OperacionesBaseDeDatos.getTemaConId(p.getTemaid())) {
+                case "Deportes":
+                    request.setAttribute("colorFondo", colorDeportes);
+                    break;
+                case "Historia":
+                    request.setAttribute("colorFondo", colorHistoria);
+                    break;
+                case "Arte":
+                    request.setAttribute("colorFondo", colorArte);
+                    break;
+                case "Geografía":
+                    request.setAttribute("colorFondo", colorGeografia);
+                    break;
+                case "Ciencias y Naturaleza":
+                    request.setAttribute("colorFondo", colorCiencias);
+                    break;
+                case "Espectáculos":
+                    request.setAttribute("colorFondo", colorEspectaculos);
+                    break;
+                case "Literatura":
+                    request.setAttribute("colorFondo", colorLiteratura);
+                    break;
+            }
+            //System.out.println((int) request.getSession().getAttribute("preguntasAMostrar"));
             Iterator i = p.getRespuestas().entrySet().iterator();
             request.getSession().setAttribute("pregunta", p);
             request.getSession().setAttribute("respuestaCorrecta", p.getRespuestaCorrecta());

@@ -243,13 +243,13 @@ public class OperacionesBaseDeDatos {
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Operaciones con usuarios">
 
-    public static int insertarUsuario(Usuario usuario) {
+    public static int insertarUsuario(Usuario usuario) throws SQLException {
         int auto_id = -1;
         String sql = "insert into usuarios (nombre,password,email) values(?,?,?)";
         PreparedStatement preparedStatement = null;
         ResultSet rs = null;
         Connection c = null;
-        try {
+        //try {
             c = ConexionBaseDeDatos.getConexion();
             preparedStatement = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, usuario.getNombre());
@@ -261,11 +261,11 @@ public class OperacionesBaseDeDatos {
             rs.next();
             auto_id = rs.getInt(1);
             usuario.setId(auto_id);
-        } catch (SQLException ex) {
-            Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        //} catch (SQLException ex) {
+        //    Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        //} finally {
             cerrarRecursos(rs, preparedStatement, c);
-        }
+        //}
         return auto_id;
     }
 

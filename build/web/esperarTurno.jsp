@@ -25,6 +25,8 @@
         <div class="contenedor">
             <c:if test="${sala.turno ne usuario.id}">
                 <h1>Esperando tu turno</h1>
+                <h1>Pregunta: ${sala.preguntaActual}</h1>
+                <h1>Total: ${fn:length(sala.preguntas)}</h1>
             </c:if>
             <c:if test="${sala.turno eq usuario.id}">
                 <script>redirigir("/Trivial/MostrarPreguntaMultijugadorServlet")</script>

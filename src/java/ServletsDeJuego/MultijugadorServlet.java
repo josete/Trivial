@@ -5,9 +5,13 @@
  */
 package ServletsDeJuego;
 
+import BaseDeDatos.OperacionesBaseDeDatos;
+import Objetos.Pregunta;
 import Objetos.Sala;
 import Objetos.Usuario;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,6 +38,23 @@ public class MultijugadorServlet extends HttpServlet {
 
         Sala s = (Sala) request.getSession().getAttribute("sala");
         s.listo((Usuario) request.getSession().getAttribute("usuario"));
+        //Se seleccionan preguntas al azar de la base de datos
+        if (s.getPreguntasCola() == null) {
+            int totalDePreguntas = OperacionesBaseDeDatos.getNumeroDePreguntas();
+            ArrayList<Integer> numeros = new ArrayList<>();
+            Random r = new Random();
+            int numeroPreguntas = 5 * s.getUsuarios().size();
+            for (int i = 0; i < numeroPreguntas; i++) {
+                int idPregunta = r.nextInt(totalDePreguntas - (1) + 1) + 1;
+                while (numeros.contains(idPregunta)) {
+                    idPregunta = r.nextInt(totalDePreguntas - (1) + 1) + 1;
+                }
+                numeros.add(idPregunta);
+                Pregunta pregunta = OperacionesBaseDeDatos.getPreguntaConId(idPregunta);
+                s.anadirPregunta(pregunta);
+            }
+            s.convertirACola();
+        }
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/EsperandoJugadores.jsp");
         dispatcher.forward(request, response);
     }
