@@ -129,6 +129,10 @@
         <servlet-class>ServletsDeJuego.LoggerServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>GestorDeExcepciones</servlet-name>
+        <servlet-class>ServletsDeJuego.GestorDeExcepciones</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertarPreguntaServlet</servlet-name>
         <url-pattern>/InsertarPreguntaServlet</url-pattern>
@@ -193,6 +197,10 @@
         <servlet-name>FinalizarPartidaMultijugadorServlet</servlet-name>
         <url-pattern>/FinalizarPartidaMultijugadorServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestorDeExcepciones</servlet-name>
+        <url-pattern>/GestorDeExcepciones</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -220,4 +228,17 @@
         <filter-name>FiltroLogin</filter-name>
         <url-pattern>/dashboard.jsp</url-pattern>
     </filter-mapping>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error404.html</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error500.html</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <!--En este caso, el recurso va a ser Servlet-->
+        <location>/GestorDeExcepciones</location>
+    </error-page>
 </web-app>

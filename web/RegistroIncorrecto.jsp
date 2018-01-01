@@ -20,7 +20,7 @@
     <body>
         <div class="contenedor">
             <h1>${errorRegistro}</h1>
-            <h4><a href="/Trivial/">Volver a inicio</a></h4>
+            <h4><a class="btn btn-lg btn-default" href="/Trivial/">Volver a inicio</a></h4>
         </div>
     </body>
 </html>
