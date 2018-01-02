@@ -73,8 +73,9 @@ public class FinalizarPartidaServlet extends HttpServlet {
         request.getSession().removeAttribute("racha");
         request.getSession().removeAttribute("maxRacha");
         //Redirigir al menu de decision con la puntuacion total
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/finalizar.jsp");
-        dispatcher.forward(request, response);
+        response.sendRedirect("/Trivial/finalizarMultijugador.jsp");
+        /*RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/finalizar.jsp");
+        dispatcher.forward(request, response);*/
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
