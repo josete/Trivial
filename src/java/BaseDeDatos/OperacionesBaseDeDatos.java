@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -239,6 +240,27 @@ public class OperacionesBaseDeDatos {
             cerrarRecursos(rs, preparedStatement, c);
         }
         return tema;
+    }
+    
+    public static  ArrayList<String> getTodasPreguntas() {
+        ArrayList<String> preguntas = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        Connection c = null;
+        try {
+            String sql = "Select * from preguntas";
+            c = ConexionBaseDeDatos.getConexion();
+            preparedStatement = c.prepareStatement(sql);
+            rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                preguntas.add(rs.getString(2));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Tema.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cerrarRecursos(rs, preparedStatement, c);
+        }
+        return preguntas;
     }
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Operaciones con usuarios">

@@ -4,8 +4,8 @@
         <listener-class>Listeners.ListenerSesion</listener-class>
     </listener>
     <servlet>
-        <servlet-name>InsertarPreguntaServlet</servlet-name>
-        <servlet-class>BaseDeDatos.InsertarPreguntaServlet</servlet-class>
+        <servlet-name>GestorPreguntasServlet</servlet-name>
+        <servlet-class>BaseDeDatos.GestorPreguntasServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CrearConexionBaseDeDatos</servlet-name>
@@ -134,8 +134,8 @@
         <servlet-class>ServletsDeJuego.GestorDeExcepciones</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>InsertarPreguntaServlet</servlet-name>
-        <url-pattern>/InsertarPreguntaServlet</url-pattern>
+        <servlet-name>GestorPreguntasServlet</servlet-name>
+        <url-pattern>/GestorPreguntasServlet</url-pattern>
     </servlet-mapping>
     <!--<servlet-mapping>
         <servlet-name>CrearConexionBaseDeDatos</servlet-name>

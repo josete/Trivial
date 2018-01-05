@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,9 +21,12 @@
         <%@include file="header.html"%>
         <div class="botones">
             <a href="/Trivial/MostrarPreguntaServlet" class="btn btn-lg btn-default">Solitario</a>
-            <a class="btn btn-lg btn-default">Buscar contrincante</a>
             <a href="/Trivial/CrearSala" class="btn btn-lg btn-default">Crear Sala</a>
             <a data-toggle="modal" data-target="#unirseSala" class="btn btn-lg btn-default">Unirse a Sala</a>
+            <c:if test="${usuario.nombre eq 'admin'}">                
+                <a href="/Trivial/nuevaPregunta.jsp" class="btn btn-lg btn-default">Insertar Nueva Pregunta</a>
+                <a href="/Trivial/GestorPreguntasServlet" class="btn btn-lg btn-default">Ver preguntas</a>
+            </c:if>
         </div>
         <div id="unirseSala" class="modal fade" role="dialog">
             <div class="modal-dialog">
