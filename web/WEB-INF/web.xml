@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <filter-mapping>
+        <filter-name>FiltroAdmin</filter-name>
+        <servlet-name>GestorPreguntasServlet</servlet-name>
+    </filter-mapping>
     <listener>
         <listener-class>Listeners.ListenerSesion</listener-class>
     </listener>
@@ -219,6 +223,10 @@
     <filter>
         <filter-name>FiltroLogin</filter-name>
         <filter-class>Filtros.FiltroLogin</filter-class>
+    </filter>
+    <filter>
+        <filter-name>FiltroAdmin</filter-name>
+        <filter-class>Filtros.FiltroAdmin</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>FiltroLogin</filter-name>

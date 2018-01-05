@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Familia
  */
-public class FiltroLogin implements Filter {
+public class FiltroAdmin implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -30,11 +30,14 @@ public class FiltroLogin implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest r = (HttpServletRequest) request;
-        if ((Usuario) r.getSession().getAttribute("usuario") != null) {
-            chain.doFilter(request, response);
-        } else {
-            HttpServletResponse re = (HttpServletResponse) response;
-            re.sendRedirect("/Trivial/perdido.html");
+        Usuario u = (Usuario) r.getSession().getAttribute("usuario");
+        if (u != null) {
+            if (u.getNombre().equals("admin")) {
+                chain.doFilter(request, response);
+            }else{
+                HttpServletResponse re = (HttpServletResponse) response;
+                re.sendRedirect("/Trivial/perdido.html");
+            }            
         }
     }
 
@@ -42,5 +45,4 @@ public class FiltroLogin implements Filter {
     public void destroy() {
         System.out.println("Destruyo el filtro");
     }
-
 }
