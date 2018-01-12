@@ -73,7 +73,7 @@ public class FinalizarPartidaServlet extends HttpServlet {
         request.getSession().removeAttribute("racha");
         request.getSession().removeAttribute("maxRacha");
         //Redirigir al menu de decision con la puntuacion total
-        response.sendRedirect("/Trivial/finalizarMultijugador.jsp");
+        response.sendRedirect("/Trivial/finalizar.jsp");
         /*RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/finalizar.jsp");
         dispatcher.forward(request, response);*/
     }
